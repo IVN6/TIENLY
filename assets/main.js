@@ -1037,25 +1037,68 @@ window.addEventListener('popstate', function(event) {
     // Aquí pones la URL de tu archivo JSON
     const jsonUrl = 'https://script.google.com/macros/s/AKfycbyxsDz1me0gNAxkUhZZSGJy8Sd4K8-R_icIWSgLcYVrSIAj1noPPn-qebd_fBxFvbvE/exec';
     let productosData = []; // Variable para almacenar los productos para no recargar varias veces revisar para cuando se actualice
+   const PRODUCTOS_CACHE_KEY = "productos_cache";
+const PRODUCTOS_CACHE_TIME = 1000 * 60 * 60; // 10 minutos
+
+   
+    function cargarProductos() {
+    const cache = localStorage.getItem(PRODUCTOS_CACHE_KEY);
+
+    if (cache) {
+        try {
+            const cacheData = JSON.parse(cache);
+
+            const cacheValido = Date.now() - cacheData.timestamp < PRODUCTOS_CACHE_TIME;
+const sinInternet = !navigator.onLine;
+
+if (cacheValido || sinInternet) {
+    productosData = cacheData.data;
+    mostrarProductos(productosData);
+    llenarFiltros(productosData);
+
+    if (sinInternet) {
+        mensajeEstado('Mostrando productos sin conexión 📵');
+    } else {
+        mensajeEstado('Productos cargados desde caché 📦');
+    }
+
+    return;
+}
+
+        } catch (e) {
+            console.warn("Cache corrupta, se vuelve a pedir a la API");
+        }
+    }
+
+    // Si no hay cache válida → fetch normal
     fetch(jsonUrl)
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+            if (!response.ok) throw new Error('Network response was not ok');
             return response.json();
         })
         .then(data => {
-            productosData = data; // Guardar los datos en la variable
-            mostrarProductos(productosData); // Mostrar los productos iniciales
+            productosData = data;
+
+            // Guardar en localStorage
+            localStorage.setItem(
+                PRODUCTOS_CACHE_KEY,
+                JSON.stringify({
+                    timestamp: Date.now(),
+                    data: data
+                })
+            );
+
+            mostrarProductos(productosData);
             llenarFiltros(productosData);
-            mensajeEstado('Operación completada:');
-            mensajeEstado(' La Tiendita! 🌟');
+            mensajeEstado('Productos cargados desde servidor 🌐');
         })
         .catch(error => {
-            console.error('Hubo un problema con tu operación fetch:', error);
-            mensajeEstado('Hubo un problema con tu operación fetch:');
-
+            console.error('Error en fetch:', error);
+            mensajeEstado('Error cargando productos');
         });
+}
+
+cargarProductos();
 
 
 
