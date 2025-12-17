@@ -1286,7 +1286,7 @@ cargarProductos();
 
     // Cantidad
     const cantidad = producto.cantidad;
-    document.getElementById('modalCantidad').innerHTML = cantidad ? `<span  style="font-weight: bold">Cantidad disponible: ${cantidad}</span>` : ''; // Mostrar o no
+    document.getElementById('modalCantidad').innerHTML = cantidad ? `<span  style="font-weight: bold">Cantidad disponible: ${cantidad}</span>` : '<span  style="font-weight: bold; font-size:20px;">Cantidad disponible: ${cantidad}</span> <span  style="font-weight: bold; font-size:20px;color:red">AGOTADO 🙊</span>'; // Mostrar o no
 
     // Colores
     const colores = producto.colores;
@@ -1394,8 +1394,26 @@ cargarProductos();
         respuestaDiv.style.display = 'none'; // Ocultar el div
     }
 
+  const CARRITO_KEY = "carrito_shop";
+
     // Carrito
     let carrito = [];
+
+const carritoGuardado = localStorage.getItem(CARRITO_KEY);
+
+if (carritoGuardado) {
+    try {
+        carrito = JSON.parse(carritoGuardado);
+        updateCart();
+        mensajeEstado("Carrito restaurado 🛒");
+    } catch (e) {
+        console.warn("Carrito corrupto, se limpia");
+        localStorage.removeItem(CARRITO_KEY);
+    }
+}
+
+
+
     // Añadir al carrito
    function addToCart(producto) {
     const existingProduct = carrito.find(item => item.id === producto.id);
@@ -1553,7 +1571,43 @@ cargarProductos();
         document.getElementById("logout").classList.add("hidden");
         document.getElementById("loginLi").classList.remove("hidden");
     }
+    function guardarCarrito() {
+    localStorage.setItem(CARRITO_KEY, JSON.stringify(carrito));
+}
+
     guardarCarrito();
+}
+
+
+const FORM_KEY = 'checkout_form_data';
+const form = document.getElementById('order-form');
+
+if (form) {
+    // 1️⃣ Restaurar datos guardados
+    const savedData = localStorage.getItem(FORM_KEY);
+    if (savedData) {
+        const data = JSON.parse(savedData);
+        Object.keys(data).forEach(name => {
+            const field = form.elements[name];
+            if (field) field.value = data[name];
+        });
+    }
+
+    // 2️⃣ Guardar automáticamente al escribir
+    form.addEventListener('input', () => {
+        const formData = {};
+        [...form.elements].forEach(el => {
+            if (el.name) {
+                formData[el.name] = el.value;
+            }
+        });
+        localStorage.setItem(FORM_KEY, JSON.stringify(formData));
+    });
+
+    // 3️⃣ Limpiar cuando se envía el pedido
+    form.addEventListener('submit', () => {
+        localStorage.removeItem(FORM_KEY);
+    });
 }
 
 
