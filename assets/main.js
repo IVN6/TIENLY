@@ -1,4 +1,23 @@
 
+
+
+const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const img = entry.target;
+            const realSrc = img.getAttribute('data-src');
+            if (realSrc) {
+                img.src = realSrc; // Aquí se descarga la imagen real
+                img.style.opacity = '1'; 
+            }
+            observer.unobserve(img); // Dejar de vigilar una vez cargada
+        }
+    });
+}, { rootMargin: "50px" }); // Empieza a cargar 50px antes de que aparezca
+           
+           
+           
+           
            document.addEventListener('DOMContentLoaded', function () {
     const carousel = document.getElementById('carousel');
     const imageSources = [
@@ -808,7 +827,7 @@
 
         }
     });
-
+    document.getElementById('toggleView').click();
 
 
     // Función para manejar el botón de retroceso
@@ -1036,6 +1055,7 @@ window.addEventListener('popstate', function(event) {
 
     // Aquí pones la URL de tu archivo JSON
     const jsonUrl = 'https://script.google.com/macros/s/AKfycbyxsDz1me0gNAxkUhZZSGJy8Sd4K8-R_icIWSgLcYVrSIAj1noPPn-qebd_fBxFvbvE/exec';
+    const pJson = 'https://script.google.com/macros/s/AKfycbyxsDz1me0gNAxkUhZZSGJy8Sd4K8-R_icIWSgLcYVrSIAj1noPPn-qebd_fBxFvbvE/exec';
     let productosData = []; // Variable para almacenar los productos para no recargar varias veces revisar para cuando se actualice
    const PRODUCTOS_CACHE_KEY = "productos_cache";
 const PRODUCTOS_CACHE_TIME = 1000 * 60 * 60; // 10 minutos
@@ -1071,7 +1091,7 @@ if (cacheValido || sinInternet) {
     }
 
     // Si no hay cache válida → fetch normal
-    fetch(jsonUrl)
+    fetch(pJson)
         .then(response => {
             if (!response.ok) throw new Error('Network response was not ok');
             return response.json();
@@ -1156,16 +1176,30 @@ cargarProductos();
     }
 
     function crearImagen(src, alt) {
-        const productoImagenDiv = document.createElement('div');
-        productoImagenDiv.classList.add('producto-imagen');
+    const productoImagenDiv = document.createElement('div');
+    productoImagenDiv.classList.add('producto-imagen');
 
-        const img = document.createElement('img');
-        img.src = src;
-        img.alt = alt;
+    const img = document.createElement('img');
+    
+    // En lugar de cargar la imagen real, ponemos un placeholder (cuadro gris o transparente)
+    img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; 
+    
+    const urlOptimizada = `https://images.weserv.nl/?url=${encodeURIComponent(src)}&output=webp`;
+    
+    // Guardamos la URL real en un atributo 'data'
+    img.setAttribute('data-src', urlOptimizada);
+    img.alt = alt;
+    img.classList.add('lazy-img'); // Clase para identificarla
+    // 3. Optimizaciones extra de renderizado
+    img.decoding = "async";
 
-        productoImagenDiv.appendChild(img);
-        return productoImagenDiv;
-    }
+    productoImagenDiv.appendChild(img);
+    
+    // Llamamos al observador para que vigile esta nueva imagen
+    observer.observe(img); 
+    
+    return productoImagenDiv;
+}
 
     function crearPrecioElement(producto) {
         const precioElement = document.createElement('p');
@@ -1286,7 +1320,7 @@ cargarProductos();
 
     // Cantidad
     const cantidad = producto.cantidad;
-    document.getElementById('modalCantidad').innerHTML = cantidad ? `<span  style="font-weight: bold">Cantidad disponible: ${cantidad}</span>` : '<span  style="font-weight: bold; font-size:20px;">Cantidad disponible: ${cantidad}</span> <span  style="font-weight: bold; font-size:20px;color:red">AGOTADO 🙊</span>'; // Mostrar o no
+     document.getElementById('modalCantidad').innerHTML = cantidad ? `<br> <span  style="font-weight: bold; color:blue">Cantidad disponible: ${cantidad}</span>` : `<span  style="font-weight: bold; font-size:20px;">Cantidad disponible: ${cantidad}</span> <span  style="font-weight: bold; font-size:20px;color:red">AGOTADO 🙊</span>`; // Mostrar o no
 
     // Colores
     const colores = producto.colores;
@@ -1609,11 +1643,6 @@ if (form) {
         localStorage.removeItem(FORM_KEY);
     });
 }
-
-
-
-
-
     const barriosZipa = [
         "Alcolpavis",
         "Algarra I",
@@ -1677,55 +1706,6 @@ if (form) {
         "Villa Unión",
         "Villas del Rosario"
     ];
-
-    // let content = document.getElementById('imagencitas');
-
-
-    // content.addEventListener('touchend', function() {
-
-    //         // Cambiar a escala deseada
-
-    //         // Volver a la escala original después de 1 segundo
-    //         setTimeout(() => {
-    //             content.style.transform = 'scale(1)';
-    //             zoomActive = false; // Restablecer estado
-    //         }, 400);
-
-    // });
-    // const container = document.querySelector('.no-scroll');
-
-    // container.addEventListener('touchmove', function (e) {
-    //     e.preventDefault(); // Previene el desplazamiento
-    // }, { passive: false });
-
-
-
-
-
-    // let content = document.getElementById('imagencitas');
-    // let scale = 1;
-    // let startScale = 1;
-
-    // content.addEventListener('touchstart', function (event) {
-    //     startScale = scale; // Guardar la escala inicial
-    // });
-
-    // content.addEventListener('touchmove', function (event) {
-    //     event.preventDefault(); // Prevenir el desplazamiento
-    //     scale = startScale + (event.touches[0].clientY - event.touches[0].clientY) / 100; // Ajustar la escala
-    //     content.style.transform = `scale(${scale})`;
-    // });
-
-    // content.addEventListener('touchend', function () {
-    //     scale = 1; // Restablecer la escala
-    //     content.style.transform = `scale(${scale})`;
-    // });
-
-
-
-
-
-
 
     //Lógica para el Botón "Finalizar Pedido"
     document.getElementById('finalizar-pedido').addEventListener('click', () => {
@@ -1800,29 +1780,12 @@ if (form) {
                     }
                     // return response.text();  // Aquí se obtiene la respuesta del servidor
                     return response.json();  // Cambiar a .json() para obtener el objeto JSON
-                })
-
-                // .then(data => {
-                //     // Aquí puedes acceder directamente a los datos
-                //     if (data.success) {
-                //         document.getElementById('respuesta').innerHTML = data.message;  // Muestra el mensaje en el HTML
-                //         const nombreCliente = document.getElementById('nombre_cliente').value;  // Nombre del cliente
-                //         const mensajeFinal = randomLista(mensajes);
-
-                //         setTimeout(() => {
-                //             document.getElementById('respuesta').scrollIntoView();
-                //             mensajeEstado(`${nombreCliente} ${data.pedido}  ${data.message}`, 50000);  // Mostrar el mensaje de éxito
-                //         }, 1000);
-                //     } else {
-                //         mensajeEstado(`Hubo un error al procesar el pedido. ${data.message} `, 40000);  // En caso de que success sea false
-                //     }
-                // })
+                })          
                 .then(data => {
                     if (data.success) {
                         // Muestra el mensaje en el HTML
                         document.getElementById('respuesta').innerHTML = data.message;
-                        document.getElementById('userProfile').style.display = 'block'
-
+                        document.getElementById('userProfile').style.display = 'block';
 
                         // Aquí agregar el nuevo pedido a la tabla de historial
                         const historyContainer = document.getElementById('history-container');
@@ -1901,26 +1864,10 @@ if (form) {
         document.getElementById('detalles-modal').style.display = 'block';
     }
 
-
-
-
-
-
-
     document.getElementById('order-form').addEventListener('submit', function (event) {
         event.preventDefault(); // Previene la recarga de la página
         enviarFormulario('crear'); // Llama a la función para enviar datos
     });
-
-
-
-
-
-
-
-
-
-
 
     function llenarFiltros(data) {
         const tipoProductoFiltro = document.getElementById('tipoProductoFiltro');
@@ -2042,161 +1989,6 @@ if (form) {
     });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // document.getElementById('search-input').addEventListener('input', showSuggestions);
-
-    // function showSuggestions() {
-    //     let searchInput = document.getElementById('search-input').value.toUpperCase();
-    //     const suggestionsList = document.getElementById('suggestions-list');
-    //     suggestionsList.innerHTML = ''; // Limpiar lista de sugerencias
-
-    //     if (searchInput.length > 1) { // Solo mostrar sugerencias si hay más de un carácter
-    //         const sugerencias = productosData.filter(producto => {
-    //             return producto["producto_Nombre"].toUpperCase().includes(searchInput);
-    //         }).slice(0, 5); // Limitar a las primeras 5 coincidencias
-
-    //         sugerencias.forEach(producto => {
-    //             const suggestionItem = document.createElement('li');
-    //             suggestionItem.textContent = producto["producto_Nombre"];
-
-    //             // Cuando el usuario hace clic en una sugerencia:
-    //             suggestionItem.addEventListener('click', () => {
-    //                 document.getElementById('search-input').value = producto["producto_Nombre"];
-    //                 // Ejecutar la búsqueda con el término de la sugerencia seleccionada
-    //                 performSearch(searchInput);
-    //                 suggestionsList.innerHTML = ''; // Limpiar sugerencias
-    //             });
-
-    //             suggestionsList.appendChild(suggestionItem);
-    //         });
-    //     }
-    // }
-    // function closeSuggestions() {
-    //     const suggestionsList = document.getElementById('suggestions-list');
-    //     suggestionsList.innerHTML = ''; // Limpiar las sugerencias
-    // }
-
-
-    // document.getElementById('search').addEventListener('click', performSearch);
-    // document.getElementById('search-input').addEventListener('keypress', (event) => {
-    //     if (event.key === 'Enter') {
-    //         performSearch();
-    //     }
-    // });
-    // document.addEventListener('click', (event) => {
-    //     const searchInput = document.getElementById('search-input');
-    //     const suggestionsList = document.getElementById('suggestions-list');
-
-    //     // Si el clic no es dentro del campo de búsqueda ni de las sugerencias, cerramos las sugerencias
-    //     if (!searchInput.contains(event.target) && !suggestionsList.contains(event.target)) {
-    //         closeSuggestions();
-    //     }
-    // });
-
-
-    // function performSearch() {
-    //     let searchInput = document.getElementById('search-input').value.toUpperCase();
-    //     const searchText = document.getElementById('search-input').value.trim(); // Obtener el texto de búsqueda
-    //     // Función que realiza la comparación para cada propiedad
-    //     const matchesSearch = (value) => value && value.toUpperCase().includes(searchInput);
-
-    //     const filtrados = productosData.filter(producto => {
-    //         return matchesSearch(producto["id"]) ||
-    //             matchesSearch(producto["Tipo de producto"]) ||
-    //             matchesSearch(producto["producto_Nombre"]) ||
-    //             matchesSearch(producto["Detalles del producto ( opcional )"]) ||
-    //             matchesSearch(producto["seo"]) ||
-    //             matchesSearch(producto["colores"]) ||
-    //             matchesSearch(producto["Tipo de Mueble 🛋️"]) ||
-    //             matchesSearch(producto["¿Cuál es la talla?"]) ||
-    //             matchesSearch(producto["precio_venta"].toString());
-    //     });
-
-    //     mostrarProductos(filtrados);
-    //     closeSuggestions();
-
-    //     if (searchText !== '') {
-    //         // Verificar si el usuario está logueado
-    //         if (!usuarioActualEmail || !token) {
-    //             console.error('El usuario no ha iniciado sesión.');
-    //             return;
-    //         }
-
-    //         // Llamar al backend para guardar la búsqueda
-    //         fetch(jsonUrl, {
-    //             method: 'POST',
-    //             body: new URLSearchParams({
-    //                 action: 'guardarBusqueda',
-    //                 email: usuarioActualEmail,  // El email del usuario
-    //                 token: token,               // El token del usuario
-    //                 searchText: searchInput.trim()     // El texto de la búsqueda
-    //             })
-    //         })
-    //             .then(response => response.json())
-    //             .then(data => {
-    //                 if (data.success) {
-    //                     console.log('Búsqueda guardada exitosamente.');
-    //                 } else {
-    //                     console.error('Error al guardar la búsqueda: ', data.message);
-    //                 }
-    //             });
-    //     } else {
-    //         console.log('La búsqueda está vacía');
-    //     }
-
-
-    // }
-
-
-    // let selectedIndex = -1;
-
-    // document.getElementById('search-input').addEventListener('keydown', (event) => {
-    //     const suggestions = document.querySelectorAll('#suggestions-list li');
-
-    //     if (event.key === 'ArrowDown') {
-    //         selectedIndex = Math.min(selectedIndex + 1, suggestions.length - 1);
-    //         highlightSuggestion(suggestions);
-    //     } else if (event.key === 'ArrowUp') {
-    //         selectedIndex = Math.max(selectedIndex - 1, 0);
-    //         highlightSuggestion(suggestions);
-    //     } else if (event.key === 'Enter' && selectedIndex >= 0) {
-    //         suggestions[selectedIndex].click();
-    //     }
-    // });
-
-    // function highlightSuggestion(suggestions) {
-    //     // Remover el resalte de todas las sugerencias
-    //     suggestions.forEach(item => {
-    //         item.classList.remove('highlight');
-    //     });
-
-    //     // Agregar el resalte a la sugerencia seleccionada
-    //     if (selectedIndex >= 0 && selectedIndex < suggestions.length) {
-    //         suggestions[selectedIndex].classList.add('highlight');
-    //     }
-    // }
-    // document.getElementById('search-input').addEventListener('input', function () {
-    //     const searchText = this.value;
-    //     const email = localStorage.getItem('userEmail'); // Obtén el correo del usuario logueado
-    //     const token = localStorage.getItem('userToken'); // Obtén el token del usuario
-
-    //     // Si el usuario está logueado, envía la búsqueda
-    //     if (email && token) {
-    //         guardarBusqueda(usuarioActualEmail, token, searchText);
-    //     }
-    // });
     document.getElementById('search').addEventListener('click', performSearch);
 document.getElementById('search-input').addEventListener('keypress', (event) => {
     if (event.key === 'Enter') {
@@ -2226,6 +2018,7 @@ function performSearch() {
             matchesSearch(producto["colores"]) ||
             matchesSearch(producto["Tipo de Mueble 🛋️"]) ||
             matchesSearch(producto["¿Cuál es la talla?"]) ||
+             matchesSearch(producto.link_foto) ||
             matchesSearch(producto["precio_venta"]);
     });
 
