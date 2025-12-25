@@ -30,6 +30,7 @@ const observer = new IntersectionObserver((entries, observer) => {
         },
         {
             src: 'https://www.ctendance.fr/wp-content/uploads/2020/08/bleu-nuit-et-jaune-orange-katarzyna-bialasiewicz-600x418.jpg', //'https://img.wallpapic.com/i2677-221-45/medium/sala-diseno-interior-moderno-de-interiores-sofa-fondo-de-pantalla.jpg',//muebles
+            // src: 'https://lh3.googleusercontent.com/d/1IRZ_YntKn1i6vNZ-A_gL1FSXFymhTSak=w469-h528-mo?authuser=0', //'https://img.wallpapic.com/i2677-221-45/medium/sala-diseno-interior-moderno-de-interiores-sofa-fondo-de-pantalla.jpg',//muebles
             title: 'Muebles'
         },
         {
@@ -68,7 +69,10 @@ const observer = new IntersectionObserver((entries, observer) => {
         imgContainer.classList.add('image-container');
 
         let img = document.createElement('img');
-        img.src = item.src;
+       let src = item.src;
+        const urlOptimizada = `https://images.weserv.nl/?url=${encodeURIComponent(src)}&w=400&output=webp&q=80&fit=cover&a=attention&sharp=0.3&mask=ellipse&trim=5&bg=transparent`;
+
+        img.src = urlOptimizada;
         img.classList.add('carousel-image');
         img.dataset.index = index;
         
@@ -860,17 +864,17 @@ const observer = new IntersectionObserver((entries, observer) => {
             toggleFilters.style.visibility = 'visible';
             history.pushState(null, null, window.location.href);
         } else {
-            // // Si no hay menús abiertos, pregunta si están seguros de salir
-            // const salir = confirm("¿Estás seguro de que quieres salir de la aplicación?");
-            // if (salir) {
-            //     window.location.href = 'http://192.168.100.2:5500/sesionesPrueba.html'; // Cambia esto por la URL de la página a la que deseas redirigir
-            // } else {
-            //     history.pushState(null, null, window.location.href); // Mantiene el estado actual
-            // }
+            // Si no hay menús abiertos, pregunta si están seguros de salir
+            const salir = confirm("¿Estás seguro de que quieres salir de la aplicación?");
+            if (salir) {
+                window.location.href = 'https://ivn6.github.io/TIENLY/shop/nay.html'; // Cambia esto por la URL de la página a la que deseas redirigir
+            } else {
+                history.pushState(null, null, window.location.href); // Mantiene el estado actual
+            }
             if (contador <= 0) {
                 // Pregunta al usuario si quiere cerrar la página
                 if (confirm("¿Quieres cerrar la página?")) {
-                    window.location.href = 'http://192.168.100.2:5500/sesionesPrueba.html'; // Cambia esto si deseas otra acción
+                    window.location.href = 'https://ivn6.github.io/TIENLY/shop/nay.html'; // Cambia esto si deseas otra acción
                 }
                 contador = 10; // Reinicia el contador
             }
@@ -1055,7 +1059,8 @@ window.addEventListener('popstate', function(event) {
 
     // Aquí pones la URL de tu archivo JSON
     const jsonUrl = 'https://script.google.com/macros/s/AKfycbyxsDz1me0gNAxkUhZZSGJy8Sd4K8-R_icIWSgLcYVrSIAj1noPPn-qebd_fBxFvbvE/exec';
-    const pJson = 'https://script.google.com/macros/s/AKfycbyxsDz1me0gNAxkUhZZSGJy8Sd4K8-R_icIWSgLcYVrSIAj1noPPn-qebd_fBxFvbvE/exec';
+    const version = Date.now();
+    const pJson = 'https://ivn6.github.io/JHNPTA/productos.json'+version;
     let productosData = []; // Variable para almacenar los productos para no recargar varias veces revisar para cuando se actualice
    const PRODUCTOS_CACHE_KEY = "productos_cache";
 const PRODUCTOS_CACHE_TIME = 1000 * 60 * 60; // 10 minutos
@@ -1184,10 +1189,8 @@ cargarProductos();
     // En lugar de cargar la imagen real, ponemos un placeholder (cuadro gris o transparente)
     img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; 
     
-    const urlOptimizada = `https://images.weserv.nl/?url=${encodeURIComponent(src)}&output=webp`;
-    
     // Guardamos la URL real en un atributo 'data'
-    img.setAttribute('data-src', urlOptimizada);
+    img.setAttribute('data-src', src);
     img.alt = alt;
     img.classList.add('lazy-img'); // Clase para identificarla
     // 3. Optimizaciones extra de renderizado
@@ -1312,10 +1315,18 @@ cargarProductos();
     if (precioOferta) {
         // Si hay oferta, mostrar el precio original tachado y el precio de oferta
         precioElement.innerHTML = `<br><span style="text-decoration: line-through; font-weight: bold; font-size: 16px;">$${precio}</span><br> 
-                                   <span style="font-weight: bold; font-size: 18px; color: red;">$${precioOferta}</span>`;
+                                   <span style="font-weight: bold; font-size: 18px; color: red;">$${precioOferta}</span><div class="controles-voz">
+    <button onclick="hablar(document.getElementById('modalDetalles').innerText)">▶️ Leer</button>
+    <button onclick="pausar()">⏸️ Pausar</button>
+    <button onclick="detener()">⏹️ Detener</button>
+</div>`;
     } else {
         // Si no hay oferta, solo mostrar el precio normal
-        precioElement.innerHTML = `<br><span  style="font-weight: bold">Precio: $${precio}</span>`;
+        precioElement.innerHTML = `<br><span  style="font-weight: bold">Precio: $${precio}</span><br><div class="controles-voz">
+    <button onclick="hablar(document.getElementById('modalDetalles').innerText)">▶️ Leer</button>
+    <button onclick="pausar()">⏸️ Pausar</button>
+    <button onclick="detener()">⏹️ Detener</button>
+</div>    `;
     }
 
     // Cantidad
@@ -1370,11 +1381,60 @@ cargarProductos();
 
     document.getElementById('cerrarModal').onclick = function () {
         const modal = document.getElementById('modal');
+    
         modal.style.display = 'none'; // Ocultar el modal
         history.pushState({ modalOpen: false }, 'modal', '') // Volver al estado anterior
     };
 
-  
+  // Variable global para controlar la instancia de voz
+let locucion;
+let vocesDisponibles = [];
+
+// Función para cargar las voces (el navegador las carga de forma asíncrona)
+function cargarVoces() {
+    vocesDisponibles = window.speechSynthesis.getVoices();
+}
+
+// Algunos navegadores requieren este evento para detectar las voces
+window.speechSynthesis.onvoiceschanged = cargarVoces;
+
+function hablar(texto) {
+    if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+        return;
+    }
+
+    window.speechSynthesis.cancel();
+    locucion = new SpeechSynthesisUtterance(texto);
+
+    // BUSCAR LA VOZ DE COLOMBIA
+    // Intentamos encontrar una que diga "Colombia" o tenga el código "es-CO"
+    const vozColombia = vocesDisponibles.find(voz => 
+        voz.lang === 'es-CO' || voz.name.includes('Colombia')
+    );
+
+    if (vozColombia) {
+        locucion.voice = vozColombia;
+    } else {
+        // Si no existe, buscamos cualquier voz en español (es-ES, es-MX, etc)
+        const vozEspanol = vocesDisponibles.find(voz => voz.lang.includes('es'));
+        if (vozEspanol) locucion.voice = vozEspanol;
+        console.log("Voz de Colombia no encontrada, usando español genérico.");
+    }
+
+    locucion.rate = 1; 
+    window.speechSynthesis.speak(locucion);
+}
+
+function pausar() {
+    if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.pause();
+    }
+}
+
+function detener() {
+    window.speechSynthesis.cancel();
+}
 
     // // Cerrar el modal si se hace clic fuera del contenido
     // // Evento para cerrar el carrito si se hace clic fuera de él
@@ -2272,5 +2332,4 @@ function performSearch() {
     // Llamar a la función al cargar la página
     cargarDatosRegistro();
     console.log(document.getElementById('telefono_cliente').value)
-
 
