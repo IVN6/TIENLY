@@ -1423,30 +1423,18 @@ width: 100%;
             word-wrap: break-word;
             
         }
+.modal-content {
+    background-color: #fff;
+    margin: 5px auto;   /* 👈 centra horizontalmente */
+    padding: 2px;
+    border: 1px solid #0056b3;
+    width: 98%;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
 
-        .modal-content {
-            background-color: #fff;
-            /* White background */
-            margin-top: 5px ;
-            margin-left: 1.5%;
-            /* 15% from the top and centered */
-            padding: 2px;
-            /* Padding */
-            /* https://drive.google.com/thumbnail?id=1zYZKztppQM9DrS0ExtFdifGvBSVcH1fO&sz=w1469-h2628-p-k-n */
-            border: 1px solid #888;
-            /* Border */
-            width: 98%;
-            /* Could be more or less, depending on screen size */
-            max-width: 600px;
-            /* Maximum width */
-            border-color: #0056b3;
-            border-radius: 8px;
-            /* Rounded corners */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            /* Shadow effect */
-            
-            
-        }
         .modal-content img{
             width: 100%;
         }
@@ -1712,12 +1700,7 @@ width: 100%;
             font-size: 18px;
         }
 
-        .no-scroll {
-            overflow-y: hidden;
-            /* Evita el desplazamiento vertical */
-            touch-action: pan-x;
-            /* Permite el desplazamiento horizontal */
-        }
+        
 
         /* Animación para el carrusel */
         @keyframes carouselAnimation {

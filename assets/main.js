@@ -864,13 +864,13 @@ const observer = new IntersectionObserver((entries, observer) => {
             toggleFilters.style.visibility = 'visible';
             history.pushState(null, null, window.location.href);
         } else {
-            // Si no hay menús abiertos, pregunta si están seguros de salir
-            const salir = confirm("¿Estás seguro de que quieres salir de la aplicación?");
-            if (salir) {
-                window.location.href = 'https://ivn6.github.io/TIENLY/shop/nay.html'; // Cambia esto por la URL de la página a la que deseas redirigir
-            } else {
-                history.pushState(null, null, window.location.href); // Mantiene el estado actual
-            }
+            // // Si no hay menús abiertos, pregunta si están seguros de salir
+            // const salir = confirm("¿Estás seguro de que quieres salir de la aplicación?");
+            // if (salir) {
+            //     window.location.href = 'https://ivn6.github.io/TIENLY/shop/nay.html'; // Cambia esto por la URL de la página a la que deseas redirigir
+            // } else {
+            //     history.pushState(null, null, window.location.href); // Mantiene el estado actual
+            // }
             if (contador <= 0) {
                 // Pregunta al usuario si quiere cerrar la página
                 if (confirm("¿Quieres cerrar la página?")) {
