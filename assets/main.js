@@ -1060,7 +1060,7 @@ window.addEventListener('popstate', function(event) {
     // Aquí pones la URL de tu archivo JSON
     const jsonUrl = 'https://script.google.com/macros/s/AKfycbyxsDz1me0gNAxkUhZZSGJy8Sd4K8-R_icIWSgLcYVrSIAj1noPPn-qebd_fBxFvbvE/exec';
     const version = Date.now();
-    const pJson = 'https://ivn6.github.io/JHNPTA/productos.json'+version;
+    const pJson = 'https://ivn6.github.io/JHNPTA/productos.json?v='+version;
     let productosData = []; // Variable para almacenar los productos para no recargar varias veces revisar para cuando se actualice
    const PRODUCTOS_CACHE_KEY = "productos_cache";
 const PRODUCTOS_CACHE_TIME = 1000 * 60 * 60; // 10 minutos
