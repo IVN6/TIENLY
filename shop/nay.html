@@ -22,6 +22,565 @@
 <link rel="preload" as="image" href="https://images.weserv.nl/?url=i.pinimg.com/originals/c1/a1/f7/c1a1f79f7169b2591c70824fe83ead45.jpg&w=400&output=webp&q=80&fit=cover&a=attention&sharp=0.3&mask=ellipse&trim=5&bg=transparent">
 <link rel="preload" as="image" href="https://lh3.googleusercontent.com/d/1KebUliq8TBi7tU6-XV3beEZBXJ13i7H0=w269-h328-mo?authuser=0">
 <!-- <script src="../assets/main.js" defer></script> -->
+
+
+</head>
+
+    
+<body>
+    <div id="loader"></div>
+    <div>
+       
+    </div>
+    <header>
+        <div class="logo">La Tiendita</div>
+        <div class="menu-icon" id="menu-icon">&#9776;</div>
+
+        <nav class="nav" id="nav">
+            <ul>
+                <li id="ofertaLi">Ofertas</li>
+                <li id="muebleLi">Muebles</li>
+                <li id="ropaLi">Moda</li>
+                <li id="userProfile" class="hidden">Perfil</li>
+                <li id="logout" class="hidden"  onclick="logout()">Cerrar Sesión</li>
+                <li id="loginLi" onclick="toggleLogin()">Iniciar Sesión</li>
+                <!-- <li><a href="#">Food</a></li> -->
+                <!-- <li><a href="#">Contacto</a></li> -->
+            </ul>
+        </nav>
+
+        <div class="search-container">
+            <input type="search" id="search-input" placeholder="Buscar">
+            <button type="button" id="search">🔍</button>
+            <ul id="suggestions-list" class="suggestions-list"></ul>
+        </div>
+
+
+        <div class="menu-icon cart-icon" id="menu-carrito">
+            <span id="cart-counter"></span>
+             🛒</div>
+            
+    </header>
+    <section id="carousel-container" class="no-scroll">
+        <section id="carousel">
+            <!-- Las imágenes serán agregadas dinámicamente por JS -->
+        </section>
+    </section>
+
+    <!-- <div id="imagencitas" class="no-scroll" style="display: block ;height:30vh;">
+       
+        <div class="slider">
+            <div class="slider-wrapper">
+               </div>
+        </div>
+
+        <img id="" alt="">
+
+    </div> -->
+    <div id="detalles-modal" style="display: none;">
+        <div class="modal-pedido">
+            <span id="cerrar-modal" class="close-pedido">&times;</span>
+            <h4>Detalles del Pedido</h4>
+            <div id="detalles-contenedor">
+                <!-- Los detalles del pedido se llenarán aquí -->
+            </div>
+        </div>
+    </div>
+
+
+    <div id="modal">
+        <div class="modal-content">
+            <span class="closeModal" id="cerrarModal" >&times;</span>
+            <h2 id="modalNombre"></h2>
+            <img id="modalImg" src="" alt="Imagen del producto" style="max-width: 100%; height: auto;">
+            <p id="modalDetalles"></p>
+            <p id="modalPrecio"></p>
+            <p id="modalCantidad"></p>
+            <p id="modalColores"></p>
+            <p id="modalTalla"></p>
+        </div>
+    </div>
+
+    </div>
+    <div id="user-info" style="display: none;">
+        <button class="close-button" onclick="closeUserInfo()">✖</button>
+        <h2 id="welcome-message">¡Bienvenido, Usuario!</h2>
+        <p class="user-detail"><strong>Email:</strong> <span id="user-email"></span></p>
+        <p class="user-detail"><strong>Teléfono:</strong> <span id="user-phone"></span></p>
+        <p class="user-detail"><strong>Dirección de Envío:</strong> <span id="user-address"></span></p>
+
+        <button class="show-options" onclick="toggleOrderHistory()">Ver Historial de Pedidos</button>
+
+        <div id="history-container" style="display: none;">
+            <h3>Historial de Pedidos</h3>
+            <table id="order-history">
+                <thead>
+                    <tr>
+                        <th>Pedido ID</th>
+                        <th>Fecha</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                        <th>Detalles</th> <!-- Nueva columna para los detalles -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Las filas se llenarán dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+    <button type="button" id="toggleFilters">Filtrar</button>
+    <button type="button" id="reset">reset</button>
+    <button id="toggleView">
+        <div class="container">
+            <div class="box box1"></div>
+            <div class="box box2"></div>
+            <div class="box box3"></div>
+            <div class="box box4"></div>
+        </div>
+
+    </button>
+
+    <div id="filtrosContainer" style="display: none;">
+        <button type="button" class="closeButton" onclick="filtro.closeFilters()">✖</button>
+        <button type="button" id="resetFilters">Restablecer Filtros</button>
+
+        <div class="filter-group">
+            <label for="tipoProductoFiltro" onclick="filtro.toggleSelect('tipoProductoFiltro')">Categoría</label>
+            <select id="tipoProductoFiltro" onchange="filtro.handleSelectChange('tipoProductoFiltro')">
+                <option value="">Todos</option>
+                <!-- Opciones se llenarán dinámicamente -->
+            </select>
+        </div>
+        <div class="filter-group " id="tproducto">
+            <label for="listaProductosFiltro" onclick="filtro.toggleSelect('listaProductosFiltro')">Lista de
+                Productos</label>
+            <select id="listaProductosFiltro" onchange="filtro.handleSelectChange('listaProductosFiltro')">
+                <option value="">Selecciona un producto</option>
+                <!-- Opciones se llenarán dinámicamente -->
+            </select>
+        </div>
+
+        <div class="filter-group" id="tgenero">
+            <label for="generoFiltro" onclick="filtro.toggleSelect('generoFiltro')">Género</label>
+            <select id="generoFiltro" onchange="filtro.handleSelectChange('generoFiltro')">
+                <option value="">Todos</option>
+                <option value="hombre">Hombre</option>
+                <option value="mujer">Mujer</option>
+            </select>
+        </div>
+
+        <div class="filter-group" id="ttalla">
+            <label for="tallaFiltro" onclick="filtro.toggleSelect('tallaFiltro')">Talla</label>
+            <select id="tallaFiltro" onchange="filtro.handleSelectChange('tallaFiltro')">
+                <option value="">Todas</option>
+                <!-- Opciones se llenarán dinámicamente -->
+            </select>
+        </div>
+
+        <div class="filter-group" id="tcolor">
+            <label for="coloresFiltro" onclick="filtro.toggleSelect('coloresFiltro')">Colores</label>
+            <select id="coloresFiltro" onchange="filtro.handleSelectChange('coloresFiltro')">
+                <option value="">Todos</option>
+                <!-- Opciones se llenarán dinámicamente -->
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="ofertaFiltro" onclick="filtro.toggleSelect('ofertaFiltro')">Ofertas</label>
+            <select id="ofertaFiltro" onchange="filtro.handleSelectChange('ofertaFiltro')">
+                <option value="">Todas</option>
+                <option value="true">Con Oferta</option>
+                <option value="false">Sin Oferta</option>
+            </select>
+        </div>
+
+        <div class="filter-group" id="tmueble">
+            <label for="tipoMuebleFiltro" onclick="filtro.toggleSelect('tipoMuebleFiltro')">Tipo de Mueble</label>
+            <select id="tipoMuebleFiltro" onchange="filtro.handleSelectChange('tipoMuebleFiltro')">
+                <option value="">Todos</option>
+                <!-- Opciones se llenarán dinámicamente -->
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label onclick="filtro.toggleInputs('precioInputs')">Rango de Precio</label>
+            <div id="precioInputs">
+                <input type="number" id="precioMinimo" placeholder="Min" />
+                <input type="number" id="precioMaximo" placeholder="Max" />
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="mensaje_cargando" id="mensajeCargando"></div>
+    <div id="respuesta">
+        <span id="mensaje-texto">🌟 ¡Bienvenido a</span>
+        <!-- <button type="button" id="cerrar-mensaje" onclick="cerrarMensaje()">Cerrar</button> -->
+    </div>
+
+
+
+    <div id="productos"></div>
+
+
+
+    <div id="carritoContainer">
+        <h2>Carrito</h2>
+        <div id="cart" class="cart-container">
+            <div id="cart-items"></div> <!-- Aquí se añadirán los productos -->
+        </div>
+        <p>Total: $<span id="cart-total">0</span></p>
+        <p>Total de productos: <span id="cart-count">0</span></p>
+        <button type="button" id="clear-cart" style="display: none;">Vaciar carrito</button>
+        <button type="button" id="finalizar-pedido" style="display:none;">Realizar pedido</button>
+    </div>
+
+
+
+    <div id="form-container" class="form-container form">
+        <button type="button" id="close-button"
+            style="margin: 0; text-align: right; display: inline-block; width: calc(100%);">✖</button>
+        <h2>Formulario de envío</h2>
+        <form id="order-form">
+            <div class="form-group ocultar-al-logueo" id="nombre-group">
+                <label for="nombre_cliente">Nombre:</label>
+                <input type="text" name="nombre_cliente" id="nombre_cliente" required>
+            </div>
+            <input type="hidden" name="action" id="action" value="crear">
+
+            <div class="form-group ocultar-al-logueo" id="apellido-group">
+                <label for="apellido_cliente">Apellido:</label>
+                <input type="text" name="apellido_cliente" id="apellido_cliente" required>
+            </div>
+            
+            <div class="form-group ocultar-al-logueo" id="cedula-group">
+                <label for="cedula_cliente">Cédula:</label>
+                <input type="text" name="cedula_cliente" id="cedula_cliente" required>
+            </div>
+
+            <div class="form-group">
+                <label for="telefono_cliente">Teléfono:</label>
+                <input type="text" name="telefono_cliente" id="telefono_cliente" required>
+            </div>
+
+            <div class="form-group">
+                <label for="departamento_cliente">Departamento:</label>
+                <select name="departamento_cliente" id="departamento_cliente" onchange="cargarCiudades()" required>
+                    <!-- Aquí se llenarán dinámicamente los departamentos -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="ciudad_cliente">Ciudad:</label>
+                <select name="ciudad_cliente" id="ciudad_cliente" onchange="mostrarBarrio()" required>
+                    <!-- Aquí se llenarán dinámicamente las ciudades -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="barrio_cliente">Barrio:</label>
+                <div id="barrio-container">
+                    <input type="text" name="barrio_cliente" id="barrio_cliente" required>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label for="direccion_cliente">Dirección:</label>
+                <input type="text" name="direccion_cliente" id="direccion_cliente" required>
+            </div>
+
+            <div class="form-group ocultar-al-logueo" id="email-group">
+                <label for="email_cliente">Email:</label>
+                <input type="email" name="email_cliente" id="email_cliente" value="" required>
+            </div>
+
+            <div class="form-group">
+                <label for="informacionAdicional">Información adicional:</label>
+                <textarea name="informacionAdicional" id="informacionAdicional"></textarea>
+            </div>
+
+            <button type="submit">Enviar Pedido</button>
+        </form>
+    </div>
+
+
+
+
+
+    <div id="miDiv"></div>
+    <button type="button" id="mostrarCarrito" style="display: none;">Mostrar Carrito</button>
+    <div id="carritoDiv"></div>
+
+    <div class="overlay" id="overlay">
+        <div class="form form-container " id="loginForm">
+            <button class="close" id="closeBtn">&times;</button>
+            <div class="formHeader">
+                <h2>Iniciar Sesión</h2>
+            </div>
+            <form id="loginFormElement">
+                <label for="loginEmail">Correo Electrónico:</label>
+                <input type="email" id="loginEmail" name="loginEmail" value="" required>
+                <span class="error" id="loginEmailError"></span>
+
+                <label for="loginPassword">Contraseña:</label>
+                <input type="password" id="loginPassword" name="loginPassword" value="" required>
+                <span class="error" id="loginPasswordError"></span>
+
+                <div class="checkbox-label">
+                    <input type="checkbox" id="showLoginPassword">
+                    <label for="showLoginPassword">Mostrar Contraseña</label>
+                </div>
+
+                <button type="submit">Iniciar Sesión</button>
+            </form>
+
+            <p><a href="#register-container" id="showRegister" target="_self">¿No tienes una cuenta? Crear una
+                    nueva.</a></p>
+        </div>
+
+        <div class="form-container form" id="registerForm" style="display: none;">
+            <button class="close" id="closeRegisterBtn">&times;</button>
+            <div class="formHeader">
+                <h2>Crear Nueva Cuenta</h2>
+            </div>
+            <div id="register-container">
+                <h2></h2>
+                <form id="registerFormElement">
+                    <label for="firstName">Nombre:</label>
+                    <input type="text" id="firstName" name="firstName" required maxlength="18"
+                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$"
+                        title="Solo se permiten letras, máximo 18 caracteres.">
+                    <span class="error" id="firstNameError"></span>
+
+                    <input type="hidden" name="action"  value="newUser">
+
+                    <label for="lastName">Apellido:</label>
+                    <input type="text" id="lastName" name="lastName" required maxlength="18"
+                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$"
+                        title="Solo se permiten letras y espacios, máximo 18 caracteres.">
+                    <span class="error" id="lastNameError"></span>
+
+                    <label for="username">Nombre de Usuario:</label>
+                    <input type="text" id="username" name="username" required value="">
+                    <span class="error" id="usernameError"></span>
+
+                    <label for="identityDocument">Documento de Identidad:</label>
+                    <input type="tel" id="identityDocument" name="identityDocument" required>
+                    <span class="error" id="identityDocumentError"></span>
+
+                    <label for="age">Edad:</label>
+                    <input type="number" id="age" name="age" min="18" value="" required>
+                    <span class="error" id="ageError"></span>
+
+                    <label for="registerEmail">Correo Electrónico:</label>
+                    <input type="email" id="registerEmail" name="registerEmail" value="" required>
+                    <span class="error" id="registerEmailError"></span>
+                    <label for="registerPassword">Contraseña:</label>
+                    <input type="password" id="registerPassword" name="registerPassword" value="" required>
+                    <span class="error" id="registerPasswordError"></span>
+
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="showRegisterPassword" value="">
+                        <label for="showRegisterPassword">Mostrar Contraseña</label>
+                    </div>
+
+                    <label for="confirmPassword">Confirmar Contraseña:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" value="" required>
+                    <span class="error" id="confirmPasswordError"></span>
+
+                    <label for="phone">Número de Teléfono:</label>
+                    <input type="tel" id="phone" name="phone" value="" required>
+                    <span class="error" id="phoneError"></span>
+                    <br>
+                    <div class="form-group">
+                        <label for="registerDepartamento">Departamento:</label>
+                        <select name="registerDepartamento" id="registerDepartamento"
+                            onchange="cargarRegisterCiudades()" required>
+                            <!-- Aquí se llenarán dinámicamente los departamentos -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerCiudad">Ciudad:</label>
+                        <select name="registerCiudad" id="registerCiudad" onchange="mostrarRegisterBarrio()" required>
+                            <!-- Aquí se llenarán dinámicamente las ciudades -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerBarrio">Barrio:</label>
+                        <div id="registerBarrioContainer">
+                            <input type="text" name="registerBarrio" id="registerBarrio" required>
+                        </div>
+                    </div>
+
+                    <label for="shippingAddress">Dirección de Envío:</label>
+                    <input type="text" id="shippingAddress" name="shippingAddress" value="" required>
+                    <span class="error" id="shippingAddressError"></span>
+
+                    <label for="additionalInfo">Información Adicional:</label>
+                    <textarea id="additionalInfo" name="additionalInfo"
+                        placeholder="Ej. Horario, torre, etc."></textarea>
+                    <span class="error" id="additionalInfoError"></span>
+
+                    <!-- Nuevas secciones para departamento, ciudad y barrio -->
+
+
+                    <button type="button" id="openModal">Ver Términos y Condiciones</button>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="terms-checkbox" name="terms-checkbox" required>
+                        <label for="terms-checkbox">Acepto Términos y Condiciones</label>
+                    </div>
+
+
+                    <div class="terms-container">
+
+
+                        <!-- El Modal -->
+                        <div id="termsModal">
+                            <div class="modal-content">
+                                <span id="closeModal">&times;</span>
+                                <h1>Términos y Condiciones de Uso</h1>
+                                <section>
+                                    <h2>1. Aceptación de los Términos</h2>
+                                    <p>Al utilizar este sitio web, usted acepta cumplir con estos Términos y
+                                        Condiciones. Si
+                                        no está de acuerdo, le recomendamos que no utilice el sitio.</p>
+                                </section>
+
+                                <section>
+                                    <h2>2. Registro de Usuario</h2>
+                                    <p>Para acceder a ciertas funciones del sitio, es posible que deba registrarse y
+                                        proporcionar información veraz y actualizada. Al registrarse, usted garantiza
+                                        que
+                                        toda la información proporcionada es correcta y completa.</p>
+                                </section>
+
+                                <section>
+                                    <h2>3. Uso del Sitio</h2>
+                                    <p>Usted se compromete a utilizar el sitio de manera responsable y de acuerdo con
+                                        todas
+                                        las leyes aplicables. Queda prohibido el uso del sitio para realizar actividades
+                                        ilegales o no autorizadas.</p>
+                                </section>
+
+                                <section>
+                                    <h2>4. Restricciones de Edad</h2>
+                                    <p>Este sitio no está destinado a personas menores de edad. Si usted es menor de 18
+                                        años, debe contar con el consentimiento de un adulto (padres o tutores legales)
+                                        para
+                                        utilizar este sitio y realizar compras.</p>
+
+                                    <p>Al registrarse y/o realizar una compra, usted garantiza que tiene la edad mínima
+                                        requerida o que ha obtenido el consentimiento de su padre, madre o tutor legal.
+                                        En
+                                        caso de que se detecte que un menor ha proporcionado información falsa sobre su
+                                        edad, nos reservamos el derecho de cancelar la cuenta y/o rechazar cualquier
+                                        pedido.
+                                    </p>
+
+                                    <h3>4.1. Procedimiento para la Verificación de Edad</h3>
+                                    <ol>
+                                        <li>
+                                            <strong>Registro:</strong>
+                                            <p>Durante el proceso de registro, se solicitará a los usuarios que ingresen
+                                                su
+                                                fecha de nacimiento. Este campo será obligatorio para la creación de una
+                                                cuenta.</p>
+                                        </li>
+                                        <li>
+                                            <strong>Consentimiento Parental:</strong>
+                                            <p>Si un usuario declara ser menor de 18 años, deberá obtener el
+                                                consentimiento
+                                                de un adulto. Esto se puede realizar mediante el envío de un formulario
+                                                de
+                                                consentimiento que deberá ser firmado por un padre o tutor legal. El
+                                                formulario estará disponible en nuestro sitio.</p>
+                                        </li>
+                                        <li>
+                                            <strong>Verificación de Edad en Compras:</strong>
+                                            <p>Antes de completar una compra de productos restringidos, se pedirá al
+                                                usuario
+                                                que confirme su edad. Si el usuario es menor de edad, se les recordará
+                                                que
+                                                deben contar con el consentimiento parental para proceder con la compra.
+                                            </p>
+                                        </li>
+                                        <li>
+                                            <strong>Consecuencias de la Falsificación:</strong>
+                                            <p>Si se determina que un menor ha proporcionado información falsa sobre su
+                                                edad
+                                                o no ha obtenido el consentimiento adecuado, nos reservamos el derecho
+                                                de
+                                                cancelar su cuenta y rechazar cualquier transacción asociada.</p>
+                                        </li>
+                                    </ol>
+                                </section>
+
+                                <section>
+                                    <h2>5. Propiedad Intelectual</h2>
+                                    <p>Todo el contenido del sitio, incluyendo texto, gráficos y logotipos, está
+                                        protegido
+                                        por derechos de propiedad intelectual. No se permite la reproducción o uso no
+                                        autorizado de dicho contenido.</p>
+                                </section>
+
+                                <section>
+                                    <h2>6. Limitación de Responsabilidad</h2>
+                                    <p>La empresa no será responsable por daños indirectos, incidentales o consecuentes
+                                        que
+                                        resulten del uso del sitio. El uso del sitio es bajo su propio riesgo.</p>
+                                </section>
+
+                                <section>
+                                    <h2>7. Modificaciones de los Términos</h2>
+                                    <p>Nos reservamos el derecho de modificar estos Términos y Condiciones en cualquier
+                                        momento. Las modificaciones entrarán en vigor una vez publicadas en el sitio. Es
+                                        su
+                                        responsabilidad revisar estos términos periódicamente.</p>
+                                </section>
+
+                                <section>
+                                    <h2>8. Contacto</h2>
+                                    <p>Si tiene alguna pregunta sobre estos Términos y Condiciones, puede ponerse en
+                                        contacto con nosotros a través de nuestro sitio.</p>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <button type="submit">Registrar</button>
+                </form>
+                <p><a href="#" id="showLogin">¿Ya tienes una cuenta? Iniciar sesión.</a></p>
+            </div>
+         
+        </div>
+
+ <img src="https://i.pinimg.com/originals/80/8c/d9/808cd912cb13dbd4e1a98329fa514851.jpg" 
+     alt="Loader Image"
+     id="loaderImage" 
+     class="loader_img lazy-img"
+     loading="lazy"
+     decoding="async">
+</body>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.0/js/intlTelInput.min.js"></script>
+
 <script defer>
     
 
@@ -2360,561 +2919,3 @@ function performSearch() {
 
 
 </script>
-
-</head>
-
-    
-<body>
-    <div id="loader"></div>
-    <div>
-       
-    </div>
-    <header>
-        <div class="logo">La Tiendita</div>
-        <div class="menu-icon" id="menu-icon">&#9776;</div>
-
-        <nav class="nav" id="nav">
-            <ul>
-                <li id="ofertaLi">Ofertas</li>
-                <li id="muebleLi">Muebles</li>
-                <li id="ropaLi">Moda</li>
-                <li id="userProfile" class="hidden">Perfil</li>
-                <li id="logout" class="hidden"  onclick="logout()">Cerrar Sesión</li>
-                <li id="loginLi" onclick="toggleLogin()">Iniciar Sesión</li>
-                <!-- <li><a href="#">Food</a></li> -->
-                <!-- <li><a href="#">Contacto</a></li> -->
-            </ul>
-        </nav>
-
-        <div class="search-container">
-            <input type="search" id="search-input" placeholder="Buscar">
-            <button type="button" id="search">🔍</button>
-            <ul id="suggestions-list" class="suggestions-list"></ul>
-        </div>
-
-
-        <div class="menu-icon cart-icon" id="menu-carrito">
-            <span id="cart-counter"></span>
-             🛒</div>
-            
-    </header>
-    <section id="carousel-container" class="no-scroll">
-        <section id="carousel">
-            <!-- Las imágenes serán agregadas dinámicamente por JS -->
-        </section>
-    </section>
-
-    <!-- <div id="imagencitas" class="no-scroll" style="display: block ;height:30vh;">
-       
-        <div class="slider">
-            <div class="slider-wrapper">
-               </div>
-        </div>
-
-        <img id="" alt="">
-
-    </div> -->
-    <div id="detalles-modal" style="display: none;">
-        <div class="modal-pedido">
-            <span id="cerrar-modal" class="close-pedido">&times;</span>
-            <h4>Detalles del Pedido</h4>
-            <div id="detalles-contenedor">
-                <!-- Los detalles del pedido se llenarán aquí -->
-            </div>
-        </div>
-    </div>
-
-
-    <div id="modal">
-        <div class="modal-content">
-            <span class="closeModal" id="cerrarModal" >&times;</span>
-            <h2 id="modalNombre"></h2>
-            <img id="modalImg" src="" alt="Imagen del producto" style="max-width: 100%; height: auto;">
-            <p id="modalDetalles"></p>
-            <p id="modalPrecio"></p>
-            <p id="modalCantidad"></p>
-            <p id="modalColores"></p>
-            <p id="modalTalla"></p>
-        </div>
-    </div>
-
-    </div>
-    <div id="user-info" style="display: none;">
-        <button class="close-button" onclick="closeUserInfo()">✖</button>
-        <h2 id="welcome-message">¡Bienvenido, Usuario!</h2>
-        <p class="user-detail"><strong>Email:</strong> <span id="user-email"></span></p>
-        <p class="user-detail"><strong>Teléfono:</strong> <span id="user-phone"></span></p>
-        <p class="user-detail"><strong>Dirección de Envío:</strong> <span id="user-address"></span></p>
-
-        <button class="show-options" onclick="toggleOrderHistory()">Ver Historial de Pedidos</button>
-
-        <div id="history-container" style="display: none;">
-            <h3>Historial de Pedidos</h3>
-            <table id="order-history">
-                <thead>
-                    <tr>
-                        <th>Pedido ID</th>
-                        <th>Fecha</th>
-                        <th>Total</th>
-                        <th>Estado</th>
-                        <th>Detalles</th> <!-- Nueva columna para los detalles -->
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Las filas se llenarán dinámicamente -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-
-
-
-
-
-
-
-    <button type="button" id="toggleFilters">Filtrar</button>
-    <button type="button" id="reset">reset</button>
-    <button id="toggleView">
-        <div class="container">
-            <div class="box box1"></div>
-            <div class="box box2"></div>
-            <div class="box box3"></div>
-            <div class="box box4"></div>
-        </div>
-
-    </button>
-
-    <div id="filtrosContainer" style="display: none;">
-        <button type="button" class="closeButton" onclick="filtro.closeFilters()">✖</button>
-        <button type="button" id="resetFilters">Restablecer Filtros</button>
-
-        <div class="filter-group">
-            <label for="tipoProductoFiltro" onclick="filtro.toggleSelect('tipoProductoFiltro')">Categoría</label>
-            <select id="tipoProductoFiltro" onchange="filtro.handleSelectChange('tipoProductoFiltro')">
-                <option value="">Todos</option>
-                <!-- Opciones se llenarán dinámicamente -->
-            </select>
-        </div>
-        <div class="filter-group " id="tproducto">
-            <label for="listaProductosFiltro" onclick="filtro.toggleSelect('listaProductosFiltro')">Lista de
-                Productos</label>
-            <select id="listaProductosFiltro" onchange="filtro.handleSelectChange('listaProductosFiltro')">
-                <option value="">Selecciona un producto</option>
-                <!-- Opciones se llenarán dinámicamente -->
-            </select>
-        </div>
-
-        <div class="filter-group" id="tgenero">
-            <label for="generoFiltro" onclick="filtro.toggleSelect('generoFiltro')">Género</label>
-            <select id="generoFiltro" onchange="filtro.handleSelectChange('generoFiltro')">
-                <option value="">Todos</option>
-                <option value="hombre">Hombre</option>
-                <option value="mujer">Mujer</option>
-            </select>
-        </div>
-
-        <div class="filter-group" id="ttalla">
-            <label for="tallaFiltro" onclick="filtro.toggleSelect('tallaFiltro')">Talla</label>
-            <select id="tallaFiltro" onchange="filtro.handleSelectChange('tallaFiltro')">
-                <option value="">Todas</option>
-                <!-- Opciones se llenarán dinámicamente -->
-            </select>
-        </div>
-
-        <div class="filter-group" id="tcolor">
-            <label for="coloresFiltro" onclick="filtro.toggleSelect('coloresFiltro')">Colores</label>
-            <select id="coloresFiltro" onchange="filtro.handleSelectChange('coloresFiltro')">
-                <option value="">Todos</option>
-                <!-- Opciones se llenarán dinámicamente -->
-            </select>
-        </div>
-
-        <div class="filter-group">
-            <label for="ofertaFiltro" onclick="filtro.toggleSelect('ofertaFiltro')">Ofertas</label>
-            <select id="ofertaFiltro" onchange="filtro.handleSelectChange('ofertaFiltro')">
-                <option value="">Todas</option>
-                <option value="true">Con Oferta</option>
-                <option value="false">Sin Oferta</option>
-            </select>
-        </div>
-
-        <div class="filter-group" id="tmueble">
-            <label for="tipoMuebleFiltro" onclick="filtro.toggleSelect('tipoMuebleFiltro')">Tipo de Mueble</label>
-            <select id="tipoMuebleFiltro" onchange="filtro.handleSelectChange('tipoMuebleFiltro')">
-                <option value="">Todos</option>
-                <!-- Opciones se llenarán dinámicamente -->
-            </select>
-        </div>
-
-        <div class="filter-group">
-            <label onclick="filtro.toggleInputs('precioInputs')">Rango de Precio</label>
-            <div id="precioInputs">
-                <input type="number" id="precioMinimo" placeholder="Min" />
-                <input type="number" id="precioMaximo" placeholder="Max" />
-            </div>
-        </div>
-    </div>
-
-
-
-    <div class="mensaje_cargando" id="mensajeCargando"></div>
-    <div id="respuesta">
-        <span id="mensaje-texto">🌟 ¡Bienvenido a</span>
-        <!-- <button type="button" id="cerrar-mensaje" onclick="cerrarMensaje()">Cerrar</button> -->
-    </div>
-
-
-
-    <div id="productos"></div>
-
-
-
-    <div id="carritoContainer">
-        <h2>Carrito</h2>
-        <div id="cart" class="cart-container">
-            <div id="cart-items"></div> <!-- Aquí se añadirán los productos -->
-        </div>
-        <p>Total: $<span id="cart-total">0</span></p>
-        <p>Total de productos: <span id="cart-count">0</span></p>
-        <button type="button" id="clear-cart" style="display: none;">Vaciar carrito</button>
-        <button type="button" id="finalizar-pedido" style="display:none;">Realizar pedido</button>
-    </div>
-
-
-
-    <div id="form-container" class="form-container form">
-        <button type="button" id="close-button"
-            style="margin: 0; text-align: right; display: inline-block; width: calc(100%);">✖</button>
-        <h2>Formulario de envío</h2>
-        <form id="order-form">
-            <div class="form-group ocultar-al-logueo" id="nombre-group">
-                <label for="nombre_cliente">Nombre:</label>
-                <input type="text" name="nombre_cliente" id="nombre_cliente" required>
-            </div>
-            <input type="hidden" name="action" id="action" value="crear">
-
-            <div class="form-group ocultar-al-logueo" id="apellido-group">
-                <label for="apellido_cliente">Apellido:</label>
-                <input type="text" name="apellido_cliente" id="apellido_cliente" required>
-            </div>
-            
-            <div class="form-group ocultar-al-logueo" id="cedula-group">
-                <label for="cedula_cliente">Cédula:</label>
-                <input type="text" name="cedula_cliente" id="cedula_cliente" required>
-            </div>
-
-            <div class="form-group">
-                <label for="telefono_cliente">Teléfono:</label>
-                <input type="text" name="telefono_cliente" id="telefono_cliente" required>
-            </div>
-
-            <div class="form-group">
-                <label for="departamento_cliente">Departamento:</label>
-                <select name="departamento_cliente" id="departamento_cliente" onchange="cargarCiudades()" required>
-                    <!-- Aquí se llenarán dinámicamente los departamentos -->
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="ciudad_cliente">Ciudad:</label>
-                <select name="ciudad_cliente" id="ciudad_cliente" onchange="mostrarBarrio()" required>
-                    <!-- Aquí se llenarán dinámicamente las ciudades -->
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="barrio_cliente">Barrio:</label>
-                <div id="barrio-container">
-                    <input type="text" name="barrio_cliente" id="barrio_cliente" required>
-                </div>
-            </div>
-
-
-            <div class="form-group">
-                <label for="direccion_cliente">Dirección:</label>
-                <input type="text" name="direccion_cliente" id="direccion_cliente" required>
-            </div>
-
-            <div class="form-group ocultar-al-logueo" id="email-group">
-                <label for="email_cliente">Email:</label>
-                <input type="email" name="email_cliente" id="email_cliente" value="" required>
-            </div>
-
-            <div class="form-group">
-                <label for="informacionAdicional">Información adicional:</label>
-                <textarea name="informacionAdicional" id="informacionAdicional"></textarea>
-            </div>
-
-            <button type="submit">Enviar Pedido</button>
-        </form>
-    </div>
-
-
-
-
-
-    <div id="miDiv"></div>
-    <button type="button" id="mostrarCarrito" style="display: none;">Mostrar Carrito</button>
-    <div id="carritoDiv"></div>
-
-    <div class="overlay" id="overlay">
-        <div class="form form-container " id="loginForm">
-            <button class="close" id="closeBtn">&times;</button>
-            <div class="formHeader">
-                <h2>Iniciar Sesión</h2>
-            </div>
-            <form id="loginFormElement">
-                <label for="loginEmail">Correo Electrónico:</label>
-                <input type="email" id="loginEmail" name="loginEmail" value="" required>
-                <span class="error" id="loginEmailError"></span>
-
-                <label for="loginPassword">Contraseña:</label>
-                <input type="password" id="loginPassword" name="loginPassword" value="" required>
-                <span class="error" id="loginPasswordError"></span>
-
-                <div class="checkbox-label">
-                    <input type="checkbox" id="showLoginPassword">
-                    <label for="showLoginPassword">Mostrar Contraseña</label>
-                </div>
-
-                <button type="submit">Iniciar Sesión</button>
-            </form>
-
-            <p><a href="#register-container" id="showRegister" target="_self">¿No tienes una cuenta? Crear una
-                    nueva.</a></p>
-        </div>
-
-        <div class="form-container form" id="registerForm" style="display: none;">
-            <button class="close" id="closeRegisterBtn">&times;</button>
-            <div class="formHeader">
-                <h2>Crear Nueva Cuenta</h2>
-            </div>
-            <div id="register-container">
-                <h2></h2>
-                <form id="registerFormElement">
-                    <label for="firstName">Nombre:</label>
-                    <input type="text" id="firstName" name="firstName" required maxlength="18"
-                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$"
-                        title="Solo se permiten letras, máximo 18 caracteres.">
-                    <span class="error" id="firstNameError"></span>
-
-                    <input type="hidden" name="action"  value="newUser">
-
-                    <label for="lastName">Apellido:</label>
-                    <input type="text" id="lastName" name="lastName" required maxlength="18"
-                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$"
-                        title="Solo se permiten letras y espacios, máximo 18 caracteres.">
-                    <span class="error" id="lastNameError"></span>
-
-                    <label for="username">Nombre de Usuario:</label>
-                    <input type="text" id="username" name="username" required value="">
-                    <span class="error" id="usernameError"></span>
-
-                    <label for="identityDocument">Documento de Identidad:</label>
-                    <input type="tel" id="identityDocument" name="identityDocument" required>
-                    <span class="error" id="identityDocumentError"></span>
-
-                    <label for="age">Edad:</label>
-                    <input type="number" id="age" name="age" min="18" value="" required>
-                    <span class="error" id="ageError"></span>
-
-                    <label for="registerEmail">Correo Electrónico:</label>
-                    <input type="email" id="registerEmail" name="registerEmail" value="" required>
-                    <span class="error" id="registerEmailError"></span>
-                    <label for="registerPassword">Contraseña:</label>
-                    <input type="password" id="registerPassword" name="registerPassword" value="" required>
-                    <span class="error" id="registerPasswordError"></span>
-
-                    <div class="checkbox-label">
-                        <input type="checkbox" id="showRegisterPassword" value="">
-                        <label for="showRegisterPassword">Mostrar Contraseña</label>
-                    </div>
-
-                    <label for="confirmPassword">Confirmar Contraseña:</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" value="" required>
-                    <span class="error" id="confirmPasswordError"></span>
-
-                    <label for="phone">Número de Teléfono:</label>
-                    <input type="tel" id="phone" name="phone" value="" required>
-                    <span class="error" id="phoneError"></span>
-                    <br>
-                    <div class="form-group">
-                        <label for="registerDepartamento">Departamento:</label>
-                        <select name="registerDepartamento" id="registerDepartamento"
-                            onchange="cargarRegisterCiudades()" required>
-                            <!-- Aquí se llenarán dinámicamente los departamentos -->
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="registerCiudad">Ciudad:</label>
-                        <select name="registerCiudad" id="registerCiudad" onchange="mostrarRegisterBarrio()" required>
-                            <!-- Aquí se llenarán dinámicamente las ciudades -->
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="registerBarrio">Barrio:</label>
-                        <div id="registerBarrioContainer">
-                            <input type="text" name="registerBarrio" id="registerBarrio" required>
-                        </div>
-                    </div>
-
-                    <label for="shippingAddress">Dirección de Envío:</label>
-                    <input type="text" id="shippingAddress" name="shippingAddress" value="" required>
-                    <span class="error" id="shippingAddressError"></span>
-
-                    <label for="additionalInfo">Información Adicional:</label>
-                    <textarea id="additionalInfo" name="additionalInfo"
-                        placeholder="Ej. Horario, torre, etc."></textarea>
-                    <span class="error" id="additionalInfoError"></span>
-
-                    <!-- Nuevas secciones para departamento, ciudad y barrio -->
-
-
-                    <button type="button" id="openModal">Ver Términos y Condiciones</button>
-                    <div class="checkbox-label">
-                        <input type="checkbox" id="terms-checkbox" name="terms-checkbox" required>
-                        <label for="terms-checkbox">Acepto Términos y Condiciones</label>
-                    </div>
-
-
-                    <div class="terms-container">
-
-
-                        <!-- El Modal -->
-                        <div id="termsModal">
-                            <div class="modal-content">
-                                <span id="closeModal">&times;</span>
-                                <h1>Términos y Condiciones de Uso</h1>
-                                <section>
-                                    <h2>1. Aceptación de los Términos</h2>
-                                    <p>Al utilizar este sitio web, usted acepta cumplir con estos Términos y
-                                        Condiciones. Si
-                                        no está de acuerdo, le recomendamos que no utilice el sitio.</p>
-                                </section>
-
-                                <section>
-                                    <h2>2. Registro de Usuario</h2>
-                                    <p>Para acceder a ciertas funciones del sitio, es posible que deba registrarse y
-                                        proporcionar información veraz y actualizada. Al registrarse, usted garantiza
-                                        que
-                                        toda la información proporcionada es correcta y completa.</p>
-                                </section>
-
-                                <section>
-                                    <h2>3. Uso del Sitio</h2>
-                                    <p>Usted se compromete a utilizar el sitio de manera responsable y de acuerdo con
-                                        todas
-                                        las leyes aplicables. Queda prohibido el uso del sitio para realizar actividades
-                                        ilegales o no autorizadas.</p>
-                                </section>
-
-                                <section>
-                                    <h2>4. Restricciones de Edad</h2>
-                                    <p>Este sitio no está destinado a personas menores de edad. Si usted es menor de 18
-                                        años, debe contar con el consentimiento de un adulto (padres o tutores legales)
-                                        para
-                                        utilizar este sitio y realizar compras.</p>
-
-                                    <p>Al registrarse y/o realizar una compra, usted garantiza que tiene la edad mínima
-                                        requerida o que ha obtenido el consentimiento de su padre, madre o tutor legal.
-                                        En
-                                        caso de que se detecte que un menor ha proporcionado información falsa sobre su
-                                        edad, nos reservamos el derecho de cancelar la cuenta y/o rechazar cualquier
-                                        pedido.
-                                    </p>
-
-                                    <h3>4.1. Procedimiento para la Verificación de Edad</h3>
-                                    <ol>
-                                        <li>
-                                            <strong>Registro:</strong>
-                                            <p>Durante el proceso de registro, se solicitará a los usuarios que ingresen
-                                                su
-                                                fecha de nacimiento. Este campo será obligatorio para la creación de una
-                                                cuenta.</p>
-                                        </li>
-                                        <li>
-                                            <strong>Consentimiento Parental:</strong>
-                                            <p>Si un usuario declara ser menor de 18 años, deberá obtener el
-                                                consentimiento
-                                                de un adulto. Esto se puede realizar mediante el envío de un formulario
-                                                de
-                                                consentimiento que deberá ser firmado por un padre o tutor legal. El
-                                                formulario estará disponible en nuestro sitio.</p>
-                                        </li>
-                                        <li>
-                                            <strong>Verificación de Edad en Compras:</strong>
-                                            <p>Antes de completar una compra de productos restringidos, se pedirá al
-                                                usuario
-                                                que confirme su edad. Si el usuario es menor de edad, se les recordará
-                                                que
-                                                deben contar con el consentimiento parental para proceder con la compra.
-                                            </p>
-                                        </li>
-                                        <li>
-                                            <strong>Consecuencias de la Falsificación:</strong>
-                                            <p>Si se determina que un menor ha proporcionado información falsa sobre su
-                                                edad
-                                                o no ha obtenido el consentimiento adecuado, nos reservamos el derecho
-                                                de
-                                                cancelar su cuenta y rechazar cualquier transacción asociada.</p>
-                                        </li>
-                                    </ol>
-                                </section>
-
-                                <section>
-                                    <h2>5. Propiedad Intelectual</h2>
-                                    <p>Todo el contenido del sitio, incluyendo texto, gráficos y logotipos, está
-                                        protegido
-                                        por derechos de propiedad intelectual. No se permite la reproducción o uso no
-                                        autorizado de dicho contenido.</p>
-                                </section>
-
-                                <section>
-                                    <h2>6. Limitación de Responsabilidad</h2>
-                                    <p>La empresa no será responsable por daños indirectos, incidentales o consecuentes
-                                        que
-                                        resulten del uso del sitio. El uso del sitio es bajo su propio riesgo.</p>
-                                </section>
-
-                                <section>
-                                    <h2>7. Modificaciones de los Términos</h2>
-                                    <p>Nos reservamos el derecho de modificar estos Términos y Condiciones en cualquier
-                                        momento. Las modificaciones entrarán en vigor una vez publicadas en el sitio. Es
-                                        su
-                                        responsabilidad revisar estos términos periódicamente.</p>
-                                </section>
-
-                                <section>
-                                    <h2>8. Contacto</h2>
-                                    <p>Si tiene alguna pregunta sobre estos Términos y Condiciones, puede ponerse en
-                                        contacto con nosotros a través de nuestro sitio.</p>
-                                </section>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <button type="submit">Registrar</button>
-                </form>
-                <p><a href="#" id="showLogin">¿Ya tienes una cuenta? Iniciar sesión.</a></p>
-            </div>
-         
-        </div>
-
- <img src="https://i.pinimg.com/originals/80/8c/d9/808cd912cb13dbd4e1a98329fa514851.jpg" 
-     alt="Loader Image"
-     id="loaderImage" 
-     class="loader_img lazy-img"
-     loading="lazy"
-     decoding="async">
-</body>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.0/js/intlTelInput.min.js"></script>
-
