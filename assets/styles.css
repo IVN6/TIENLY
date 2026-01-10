@@ -826,7 +826,7 @@ width: 100%;
             align-items: center;
             padding: var(--header-padding) 0.3125rem;
             /* 10px 5px */
-            background-color: #333;
+            background-color: #000000;
             color: white;
             position: fixed;
             top: 0;

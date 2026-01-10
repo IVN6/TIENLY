@@ -1410,14 +1410,14 @@ function hablar(texto) {
     // BUSCAR LA VOZ DE COLOMBIA
     // Intentamos encontrar una que diga "Colombia" o tenga el código "es-CO"
     const vozColombia = vocesDisponibles.find(voz => 
-        voz.lang === 'es-CO' || voz.name.includes('Colombia')
+        voz.lang === 'es-CO' || voz.name.includes('Col')
     );
 
     if (vozColombia) {
         locucion.voice = vozColombia;
     } else {
         // Si no existe, buscamos cualquier voz en español (es-ES, es-MX, etc)
-        const vozEspanol = vocesDisponibles.find(voz => voz.lang.includes('es'));
+        const vozEspanol = vocesDisponibles.find(voz => voz.lang.includes('MX'));
         if (vozEspanol) locucion.voice = vozEspanol;
         console.log("Voz de Colombia no encontrada, usando español genérico.");
     }
@@ -2333,3 +2333,10 @@ function performSearch() {
     cargarDatosRegistro();
     console.log(document.getElementById('telefono_cliente').value)
 
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js")
+      .then(() => console.log("Service Worker registrado"))
+      .catch((err) => console.log("Error SW:", err));
+  });
+}
