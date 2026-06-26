@@ -1,5 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
+    <head>
+    <script>
+        // 1. Leer los parámetros inmediatamente (antes de renderizar nada)
+        const urlParams = new URLSearchParams(window.location.search);
+        const aliado = urlParams.get('aliado');
+        const version = urlParams.get('v');
+
+        // 2. Si es el flujo de ella, saltamos al archivo local de inmediato
+        if (aliado === 'naya' && version === 'comiccon') {
+            window.location.href = "naya.html"; 
+        }
+    </script>
+    <!-- Tus estilos y scripts de TIENLY van AQUÍ ABAJO -->
+    <link rel="stylesheet" href="styles.css">
+    </head>
+    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
