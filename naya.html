@@ -7,16 +7,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Comic-Con Publicidad Hub - Naya</title>
-    <style>
+        <style>
         :root {
             --primary: #6f42c1;
+            --primary-light: #f3f0ff;
             --success: #25D366;
             --warning: #ffc107;
             --danger: #dc3545;
-            --dark: #212529;
-            --bg-interno: #f8f9fa;
-            --border: #dee2e6;
-            --nav-height: 70px;
+            --dark: #1e1e24;
+            --bg-interno: #f1f3f5;
+            --border: #e9ecef;
+            --nav-height: 75px;
         }
 
         * {
@@ -26,7 +27,7 @@
         }
 
         body {
-            font-family: system-ui, -apple-system, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg-interno);
             color: var(--dark);
             height: 100vh;
@@ -34,17 +35,19 @@
             flex-direction: column;
             overflow: hidden;
             user-select: none;
+            -webkit-font-smoothing: antialiased;
         }
 
         .mobile-nav {
             display: flex;
             background: white;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid rgba(0,0,0,0.05);
             height: var(--nav-height);
             position: fixed;
             bottom: 0;
             width: 100%;
             z-index: 2000;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.04);
         }
 
         .nav-tab {
@@ -53,18 +56,19 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: #6c757d;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #868e96;
             background: none;
             border: none;
             cursor: pointer;
-            gap: 4px;
+            gap: 6px;
+            transition: all 0.2s ease;
         }
 
         .nav-tab.active {
             color: var(--primary);
-            background: #f3f0ff;
+            background: var(--primary-light);
         }
 
         .app-container {
@@ -80,8 +84,9 @@
             flex-direction: column;
             width: 100%;
             height: 100%;
-            padding: 15px;
+            padding: 20px;
             overflow: hidden;
+            background: #ffffff;
         }
 
         .section-view.active {
@@ -91,216 +96,333 @@
         .scrollable-content {
             flex: 1;
             overflow-y: auto;
-            padding-bottom: 90px; /* Evita que la barra móvil tape el contenido */
-            
+            padding-bottom: 100px;
         }
 
-        /* --- VISUALIZADOR MULTIPRODUCTO --- */
+        /* --- CONTENEDOR RENDERS / MOCKUPS --- */
         .render-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
+            gap: 25px;
+            padding-top: 10px;
         }
 
         .mockup-wrapper {
-            width: 320px;
-            height: 200px;
-            position: relative;
+            width: 100%;
+            max-width: 340px;
+            height: 260px;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding-top: 40px;
+            background: #f8f9fa;
+            border-radius: 16px;
+            border: 2px dashed #e2e8f0;
+            position: relative;
         }
 
+        /* --- MOCKUP BASE (TARJETA CRÉDITO) --- */
         .tarjeta-mockup {
-            width: 100%;
-            height: 100%;
-            border-radius: 15px;
-            background: #2b2b2b;
+            width: 300px;
+            height: 188px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #1f1c2c 0%, #928dab 100%);
             background-size: cover;
             background-position: center;
             position: relative;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: all 0.3s;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
         }
 
-        /* Modificadores estéticos de mockups */
-        .tarjeta-mockup.tipo-Camiseta {
-            border-radius: 50% 50% 0 0;
-            width: 220px;
-            height: 220px;
-            background-color: #ffffff;
-            border: 2px dashed #ccc;
-        }
-        .tarjeta-mockup.tipo-Termo {
-            width: 140px;
-            height: 240px;
-            border-radius: 20px;
-            background-color: #333;
+        /* Reflejo elegante sobre la tarjeta */
+        .tarjeta-mockup::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 60%);
+            pointer-events: none;
+            z-index: 2;
         }
 
+        /* --- CHIP REALISTA CON CIRCUITOS --- */
         .tarjeta-mockup .chip {
-            width: 45px;
+            width: 46px;
             height: 35px;
-            background: linear-gradient(135deg, #f0d060, #cc9933);
+            background: linear-gradient(135deg, #ffd700 0%, #cca100 50%, #ffeb7a 100%);
             border-radius: 6px;
             position: absolute;
-            top: 40px;
-            left: 25px;
+            top: 45%;
+            left: 24px;
+            transform: translateY(-50%);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(255,255,255,0.2);
+            z-index: 3;
+            border: 1px solid rgba(0,0,0,0.15);
+        }
+
+        /* Líneas de circuito del chip */
+        .tarjeta-mockup .chip::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 5px;
+            background: 
+                linear-gradient(90deg, transparent 46%, rgba(0,0,0,0.25) 47%, rgba(0,0,0,0.25) 53%, transparent 54%),
+                linear-gradient(0deg, transparent 46%, rgba(0,0,0,0.25) 47%, rgba(0,0,0,0.25) 53%, transparent 54%);
+        }
+
+        .tarjeta-mockup .chip::before {
+            content: '';
+            position: absolute;
+            top: 6px; left: 8px; right: 8px; bottom: 6px;
+            border: 1px solid rgba(0,0,0,0.15);
+            border-radius: 2px;
+        }
+
+        /* --- MODIFICADOR: CAMISETAS --- */
+        .tarjeta-mockup.tipo-Camiseta {
+            width: 200px;
+            height: 220px;
+            border-radius: 10px 10px 40px 40px;
+            background-color: #ffffff;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Mangas de la camiseta */
+        .tarjeta-mockup.tipo-Camiseta::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -25px;
+            width: 250px; height: 70px;
+            background: inherit;
+            border-radius: 12px 12px 0 0;
+            z-index: -1;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* Cuello de la camiseta */
+        .tarjeta-mockup.tipo-Camiseta::after {
+            content: '';
+            position: absolute;
+            top: -1px; left: 50%;
+            transform: translateX(-50%);
+            width: 70px; height: 25px;
+            background: #f8f9fa;
+            border: 1px solid #e2e8f0;
+            border-radius: 0 0 40px 40px;
+            z-index: 2;
+        }
+
+        /* --- MODIFICADOR: TERMO / VASO --- */
+        .tarjeta-mockup.tipo-Termo {
+            width: 120px;
+            height: 230px;
+            border-radius: 12px 12px 30px 30px;
+            background-color: #2b2d42;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            clip-path: polygon(5% 0%, 95% 0%, 85% 100%, 15% 100%); /* Efecto cónico de vaso/termo */
+        }
+
+        /* Tapa del termo */
+        .tarjeta-mockup.tipo-Termo::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 20px;
+            background: linear-gradient(90deg, #8d99ae, #edf2f4, #8d99ae);
+            border-bottom: 2px solid rgba(0,0,0,0.2);
+            z-index: 4;
         }
 
         .tipo-sticker {
             position: absolute;
-            bottom: 15px;
-            right: 15px;
+            bottom: 12px;
+            right: 12px;
             color: white;
-            font-size: 0.75rem;
-            font-weight: bold;
-            background: rgba(0,0,0,0.6);
-            padding: 4px 8px;
-            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(0, 0, 0, 0.75);
+            padding: 5px 10px;
+            border-radius: 6px;
+            backdrop-filter: blur(4px);
+            z-index: 5;
         }
 
+        /* --- FORMULARIOS --- */
         .form-render {
             width: 100%;
-            max-width: 350px;
+            max-width: 340px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         input, select, textarea {
-            padding: 12px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
+            padding: 12px 14px;
+            border: 1px solid #ced4da;
+            border-radius: 10px;
             font-size: 0.95rem;
             outline: none;
             background: white;
             width: 100%;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(111, 66, 193, 0.15);
         }
 
         .btn-action {
             background: var(--primary);
             color: white;
             border: none;
-            padding: 14px;
+            padding: 15px;
             font-size: 1rem;
-            font-weight: bold;
-            border-radius: 8px;
+            font-weight: 700;
+            border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 4px 6px rgba(111, 66, 193, 0.15);
+            box-shadow: 0 4px 12px rgba(111, 66, 193, 0.2);
+            transition: all 0.2s;
+        }
+
+        .btn-action:active {
+            transform: scale(0.98);
         }
 
         /* --- CATÁLOGO --- */
-        .search-box {
-            margin-bottom: 10px;
-        }
+        .search-box { margin-bottom: 15px; }
+        
         .tag-container {
             display: flex;
-            gap: 5px;
+            gap: 8px;
             overflow-x: auto;
-            padding-bottom: 8px;
-            margin-bottom: 12px;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
         }
+        
         .tag-badge {
             background: #e9ecef;
-            padding: 6px 12px;
-            border-radius: 15px;
+            padding: 6px 14px;
+            border-radius: 20px;
             font-size: 0.8rem;
             white-space: nowrap;
             cursor: pointer;
-            font-weight: 500;
+            font-weight: 600;
+            color: #495057;
+            transition: all 0.2s;
         }
+        
         .tag-badge.active {
             background: var(--primary);
             color: white;
         }
+
         .grid-catalogo {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 12px;
         }
+
         .card-item {
             background: white;
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
         }
+
         .card-img {
             width: 100%;
-            height: 110px;
+            height: 120px;
             background-size: cover;
             background-position: center;
-            background-color: #ddd;
-        }
-        .card-info {
-            padding: 8px;
-            font-size: 0.8rem;
+            background-color: #e9ecef;
         }
 
-        /* --- TICKETS MONITOR --- */
+        .card-info {
+            padding: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* --- MONITOR Y PROYECTOS --- */
         .lead-ticket {
             background: white;
-            padding: 12px;
+            padding: 15px;
             border-left: 5px solid var(--primary);
-            border-radius: 6px;
-            margin-bottom: 10px;
-            position: relative;
-        }
-        .status-select {
-            margin-top: 8px;
-            padding: 4px;
-            font-size: 0.8rem;
-            width: auto;
-            display: inline-block;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
-        #toast-container {
-            position: fixed;
-            bottom: 85px;
-            left: 50%;
-            transform: translateX(-50%) translateY(10px);
-            background: rgba(33, 37, 41, 0.95);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            z-index: 5000;
-            opacity: 0;
-            transition: all 0.25s ease;
-            pointer-events: none;
+        .status-select {
+            margin-top: 10px;
+            padding: 6px;
+            font-size: 0.8rem;
+            width: auto;
+            border-radius: 6px;
         }
-        #toast-container.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
         .grid-necesidades {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
+
         .btn-necesidad {
             padding: 12px;
-            border: 1px solid var(--border);
+            border: 1px solid #ced4da;
             background: white;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 600;
             font-size: 0.85rem;
+            transition: all 0.2s;
         }
+
         .btn-necesidad.active {
             background: var(--dark);
             color: white;
+            border-color: var(--dark);
         }
 
+        #toast-container {
+            position: fixed;
+            bottom: 95px;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: rgba(30, 30, 36, 0.95);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            z-index: 5000;
+            opacity: 0;
+            transition: all 0.2s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        #toast-container.show { 
+            opacity: 1; 
+            transform: translateX(-50%) translateY(0); 
+        }
+
+        /* --- RESPONSIVE ESCRITORIO --- */
         @media (min-width: 768px) {
             .mobile-nav { display: none; }
             .app-container {
                 display: grid;
-                grid-template-columns: 1.2fr 1fr 1.2fr 1fr;
+                grid-template-columns: 1fr 1fr 1fr 1fr;
                 height: 100vh;
             }
             .section-view {
@@ -309,7 +431,7 @@
                 height: 100vh;
             }
             .section-view:last-child { border-right: none; }
-            .scrollable-content { padding-bottom: 20px; }
+            .scrollable-content { padding-bottom: 30px; }
         }
     </style>
 </head>
