@@ -506,65 +506,72 @@
             if (window.innerWidth < 768) switchView('view-render', document.getElementById('btn-tab-render'));
         }
 
-        // --- GUARDAR EN LÍNEA / LOCAL ---
-        async function guardarDisenoComunidad() {
+        // --- GUARDADO DE DATOS ---
+        async function guardarDisenoYPedido() {
             const tipo = document.getElementById('select-tipo').value;
             const url = document.getElementById('url-imagen').value.trim();
             const fileInput = document.getElementById('file-imagen');
-            const nombre = document.getElementById('nombre-sticker').value.trim() || "Sticker ComicCon";
+            const nombre = document.getElementById('nombre-sticker').value.trim() || "Diseño sin nombre";
             const tag = document.getElementById('tag-sticker').value.trim() || "Geek";
-            const contacto = document.getElementById('cliente-whatsapp-sticker').value.trim() || "Curioso en Stand";
+            const contacto = document.getElementById('cliente-whatsapp-sticker').value.trim();
 
-            // Guardar datos en LocalStorage para CERO FRICCIÓN en el próximo uso
-            localStorage.setItem('userContacto', contacto);
-            localStorage.setItem('userLastTag', tag);
+            if (!contacto) {
+                showToast("⚠️ Deja tu contacto para confirmar el diseño.");
+                return;
+            }
 
+            let finalImgSrc = url;
+
+            // Es una imagen del celular local
             if (fileInput.files.length > 0) {
                 const reader = new FileReader();
                 reader.readAsDataURL(fileInput.files[0]);
-                reader.onload = function() {
-                    misFotosLocales.unshift({ id: Date.now(), nombre: nombre, url: reader.result, tag: "Mis Fotos" });
+                reader.onload = function () {
+                    const localData = { id: Date.now(), nombre: nombre, url: reader.result, tag: 'Mis Fotos' };
+                    misFotosLocales.unshift(localData);
                     localStorage.setItem('misFotosLocales', JSON.stringify(misFotosLocales));
-                    procesarTicketFinal(tipo, "Imagen desde Galería (Celular)", contacto);
+                    registrarTicketInterno(tipo, "Archivo Local (Mis Fotos)", contacto);
                 };
                 return;
             }
 
+            // Si es un link URL, alimenta el catálogo global en JSONBin
             if (url) {
-                const yaExiste = catalogoComunitario.some(c => c.url === url);
-                if (!yaExiste) {
+                const existe = catalogoComunitario.some(item => item.url === url);
+                if (!existe) {
                     catalogoComunitario.unshift({ id: Date.now(), nombre: nombre, url: url, tag: tag });
                 }
             }
 
-            procesarTicketFinal(tipo, url || "Sin imagen", contacto);
+            registrarTicketInterno(tipo, url || "Ninguno", contacto);
         }
 
-        async function procesarTicketFinal(tipo, linkInfo, contacto) {
+        async function registrarTicketInterno(tipo, imgUrl, contacto) {
             const nuevoLead = {
                 id: Date.now(),
-                fecha: new Date().toISOString(),
+                fechaAbierto: new Date().toISOString(),
                 categoria: 'Sticker Personalizado',
-                detalle: `Soporte: ${tipo} | Origen: ${linkInfo}`,
+                detalle: `Tipo: ${tipo} | Img: ${imgUrl}`,
                 contacto: contacto,
                 estado: 'Pendiente',
-                notas: 'Renderizado automático desde stand.'
+                notas: 'Esperando confirmación el martes.'
             };
 
             dbLeads.unshift(nuevoLead);
-            showToast("✅ ¡Cargado con éxito!");
+            showToast("🚀 ¡Diseño procesado! Revisa el catálogo o espera respuesta.");
             
+            // Limpieza
             document.getElementById('url-imagen').value = "";
             document.getElementById('file-imagen').value = "";
             document.getElementById('nombre-sticker').value = "";
+            document.getElementById('cliente-whatsapp-sticker').value = "";
             document.getElementById('tarjeta-preview').style.backgroundImage = "none";
 
-            await pushBaseDatos();
+            await actualizarBaseDatos();
             renderCatalogo();
             renderMonitor();
         }
 
-        // --- PROYECTOS GRANDE ESCALA ---
         function toggleNecesidad(btn, valor) {
             btn.classList.toggle('active');
             if (btn.classList.contains('active')) {
@@ -575,109 +582,113 @@
         }
 
         async function guardarPedidoProyecto() {
-            const marca = document.getElementById('proyecto-contacto').value.trim();
-            const redes = document.getElementById('proyecto-redes').value.trim();
-            const notas = document.getElementById('proyecto-notas').value.trim();
+            const marca = document.getElementById('proyecto-contacto').value;
+            const redes = document.getElementById('proyecto-redes').value;
+            const notas = document.getElementById('proyecto-notas').value;
 
-            if (!marca) { showToast("⚠️ Por favor ingresa tu nombre o marca."); return; }
-
-            localStorage.setItem('userProyectoNombre', marca);
-            localStorage.setItem('userProyectoRedes', redes);
+            if (!marca || !redes) {
+                showToast("⚠️ Rellena tu marca/nombre y contacto.");
+                return;
+            }
 
             const nuevoLead = {
                 id: Date.now(),
-                fecha: new Date().toISOString(),
+                fechaAbierto: new Date().toISOString(),
                 categoria: 'Proyecto Publicitario',
-                detalle: necesidadesSeleccionadas.length > 0 ? necesidadesSeleccionadas.join(', ') : 'Branding Exterior',
-                contacto: `${marca} (${redes || 'Sin Redes'})`,
+                detalle: necesidadesSeleccionadas.length > 0 ? necesidadesSeleccionadas.join(', ') : 'Soporte General',
+                contacto: `${marca} (${redes})`,
                 estado: 'Pendiente',
-                notes: notas || 'Contacto diferido martes.'
+                notas: notas || 'Sin especificaciones breves.'
             };
 
             dbLeads.unshift(nuevoLead);
+            document.getElementById('proyecto-contacto').value = '';
+            document.getElementById('proyecto-redes').value = '';
             document.getElementById('proyecto-notas').value = '';
             document.querySelectorAll('.btn-necesidad').forEach(b => b.classList.remove('active'));
             necesidadesSeleccionadas = [];
 
-            showToast("🚀 Solicitud captada para seguimiento");
-            await pushBaseDatos();
+            showToast("✅ Requerimiento guardado para el Martes.");
+            await actualizarBaseDatos();
             renderMonitor();
         }
 
-        // --- ELEMENTOS DE RENDER DINÁMICOS ---
-        function renderSugerenciasFormTags() {
-            const contenedor = document.getElementById('form-tags-sugeridos');
-            const tags = [...new Set(catalogoComunitario.map(c => c.tag))].slice(0, 5);
-            contenedor.innerHTML = tags.map(t => `
-                <span class="mini-tag" onclick="document.getElementById('tag-sticker').value='${t}'">#${t}</span>
-            `).join('');
-        }
-
+        // --- RENDERIZACIÓN DE VISTAS ---
         function renderCatalogo() {
             const contenedor = document.getElementById('contenedor-catalogo');
-            const contenedorFiltros = document.getElementById('lista-tags-filtro');
-            const busqueda = document.getElementById('input-buscar').value.toLowerCase();
+            const contenedorTags = document.getElementById('lista-tags');
+            
+            // Unir catálogo en la nube + fotos locales del celular actual
+            const todoElCatalogo = [...misFotosLocales, ...catalogoComunitario];
 
-            const fusionCatalogo = [...misFotosLocales, ...catalogoComunitario];
-            const todosLosTags = ['Todos', ...new Set(fusionCatalogo.map(f => f.tag))];
-
-            contenedorFiltros.innerHTML = todosLosTags.map(t => `
-                <span class="tag-badge ${tagFiltroSeleccionado === t ? 'active' : ''}" onclick="cambiarFiltroTag('${t}')">${t}</span>
+            // Extraer Tags Únicos
+            const tags = ['Todos', ...new Set(todoElCatalogo.map(i => i.tag))];
+            contenedorTags.innerHTML = tags.map(t => `
+                <span class="tag-badge ${tagSeleccionado === t ? 'active' : ''}" onclick="filtrarPorTag('${t}')">${t}</span>
             `).join('');
 
-            const filtrados = fusionCatalogo.filter(item => {
-                const matchesTag = (tagFiltroSeleccionado === "Todos" || item.tag === tagFiltroSeleccionado);
-                const matchesText = item.nombre.toLowerCase().includes(busqueda) || item.tag.toLowerCase().includes(busqueda);
-                return matchesTag && matchesText;
+            // Filtrado
+            const buscador = document.getElementById('input-buscar').value.toLowerCase();
+            const filtrados = todoElCatalogo.filter(item => {
+                const cumpleTag = (tagSeleccionado === "Todos" || item.tag === tagSeleccionado);
+                const cumpleTexto = item.nombre.toLowerCase().includes(buscador) || item.tag.toLowerCase().includes(buscador);
+                return cumpleTag && cumpleTexto;
             });
 
-            if (filtrados.length === 0) {
-                contenedor.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:#999; padding:20px;">No hay stickers en esta sección todavía.</div>`;
+            if(filtrados.length === 0) {
+                contenedor.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:20px; color:#aaa;">No se encontraron diseños.</div>`;
                 return;
             }
 
             contenedor.innerHTML = filtrados.map(item => `
-                <div class="card-item" onclick="usarDisenoDelCatalogo('${item.url}')">
+                <div class="card-item" onclick="aplicarDisenoCatalogo('${item.url}')">
                     <div class="card-img" style="background-image: url('${item.url}')"></div>
                     <div class="card-info">
                         <strong>${item.nombre}</strong><br>
-                        <span style="color:var(--primary); font-size:0.75rem;">🏷️ ${item.tag}</span>
+                        <span style="color:var(--primary); font-size:0.7rem;">🏷️ ${item.tag}</span>
                     </div>
                 </div>
             `).join('');
         }
 
-        function cambiarFiltroTag(tag) {
-            tagFiltroSeleccionado = tag;
+        function filtrarPorTag(tag) {
+            tagSeleccionado = tag;
             renderCatalogo();
         }
 
-        function modificarEstadoLead(id, estadoNuevo) {
-            const lead = dbLeads.find(l => l.id === id);
-            if (lead) {
-                lead.estado = estadoNuevo;
-                pushBaseDatos();
+        function filtrarCatalogo() {
+            renderCatalogo();
+        }
+
+        function cambiarEstadoTicket(id, nuevoEstado) {
+            const ticket = dbLeads.find(l => l.id === id);
+            if (ticket) {
+                ticket.estado = nuevoEstado;
+                actualizarBaseDatos();
             }
         }
 
         function renderMonitor() {
             const contenedor = document.getElementById('lista-leads');
             if (dbLeads.length === 0) {
-                contenedor.innerHTML = `<div style="text-align:center; padding:30px; color:#aaa;">Sin leads captados.</div>`;
+                contenedor.innerHTML = `<div style="color:#aaa; text-align:center; padding:35px;">No hay registros captados aún.</div>`;
                 return;
             }
 
             contenedor.innerHTML = dbLeads.map(l => {
-                const horaStr = l.fecha ? new Date(l.fecha).toLocaleTimeString() : new Date(l.id).toLocaleTimeString();
+                const fecha = l.fechaAbierto ? new Date(l.fechaAbierto).toLocaleTimeString() : new Date(l.id).toLocaleTimeString();
                 return `
                     <div class="lead-ticket" style="border-left-color: ${l.estado === 'Completado' ? 'var(--success)' : l.estado === 'En Proceso' ? 'var(--warning)' : 'var(--danger)'}">
                         <div style="font-size:0.8rem; display:flex; justify-content:space-between; font-weight:bold;">
                             <span>📌 ${l.categoria}</span>
-                            <span style="color:var(--primary)">⏱️ ${horaStr}</span>
+                            <span style="color:#6c757d;">⏱️ ${fecha}</span>
                         </div>
-                        <div style="font-size:0.95rem; font-weight:bold; margin:3px 0;">${l.contacto}</div>
-                        <div style="font-size:0.85rem; color:#495057;">${l.detalle}</div>
-                        <select class="status-select" onchange="modificarEstadoLead(${l.id}, this.value)">
+                        <div style="font-size:0.9rem; font-weight:bold; margin:4px 0;">Contacto: ${l.contacto}</div>
+                        <div style="font-size:0.8rem; color:#495057;">Detalle: ${l.detalle}</div>
+                        <div style="font-size:0.75rem; background:#f1f3f5; padding:4px; margin-top:5px; border-radius:4px;">
+                            <strong>Nota:</strong> ${l.notas}
+                        </div>
+                        <select class="status-select" onchange="cambiarEstadoTicket(${l.id}, this.value)">
                             <option value="Pendiente" ${l.estado === 'Pendiente' ? 'selected' : ''}>🔴 Pendiente</option>
                             <option value="En Proceso" ${l.estado === 'En Proceso' ? 'selected' : ''}>🟡 En Proceso</option>
                             <option value="Completado" ${l.estado === 'Completado' ? 'selected' : ''}>🟢 Completado</option>
