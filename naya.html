@@ -3,10 +3,10 @@
 <head>
     <script>
         window.history.replaceState(null, "", "/TIENLY/?shop=naya&v=comiccon");
-    </script>
+    </script
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sticker Studio - Naya</title>
+    <title>Sticker & Shirt Studio</title>
     <style>
         :root {
             --primary: #6f42c1;
@@ -38,13 +38,13 @@
         .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 600; color: #868e96; background: none; border: none; cursor: pointer; gap: 3px; }
         .nav-tab.active { color: var(--primary); background: var(--primary-light); }
 
-        /* --- MOCKUP FIX (ALTO FIJO Y FLEX-SHRINK: 0) --- */
-        .render-container { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; }
+        /* --- MOCKUP WORKSPACE --- */
+        .render-container { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
         
         .mockup-wrapper {
             width: 100%;
             max-width: 340px;
-            min-height: 240px;
+            min-height: 260px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -52,33 +52,25 @@
             border-radius: 16px;
             border: 2px dashed #cbd5e1;
             position: relative;
-            flex-shrink: 0; /* Previene colapso en pantallas móviles */
+            flex-shrink: 0;
             padding: 15px;
-            margin-bottom: 5px;
         }
 
-        /* Tarjeta de Crédito Elegante */
+        /* Tarjeta de Crédito Horizontal / Vertical */
         .tarjeta-mockup {
-            width: 280px;
-            height: 175px;
+            width: 280px; height: 175px;
             border-radius: 12px;
             background: linear-gradient(135deg, #1f1c2c 0%, #928dab 100%);
-            background-size: cover;
-            background-position: center;
+            background-size: cover; background-position: center;
             position: relative;
             box-shadow: 0 12px 28px rgba(0,0,0,0.25);
             border: 1px solid rgba(255,255,255,0.2);
             transition: all 0.3s ease;
-            flex-shrink: 0;
-            overflow: hidden;
+            flex-shrink: 0; overflow: hidden;
         }
+        .tarjeta-mockup.vertical { width: 175px; height: 280px; }
 
-        .tarjeta-mockup.vertical {
-            width: 175px;
-            height: 280px;
-        }
-
-        /* Chip con Microcircuitos */
+        /* Chip Ajustable según Orientación */
         .tarjeta-mockup .chip {
             width: 42px; height: 32px;
             background: linear-gradient(135deg, #ffd700 0%, #cca100 100%);
@@ -86,29 +78,41 @@
             transform: translateY(-50%); z-index: 3;
             box-shadow: inset 0 1px 2px rgba(0,0,0,0.4);
             border: 1px solid rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        .tarjeta-mockup.vertical .chip {
+            top: 18px; left: 50%;
+            transform: translateX(-50%) rotate(90deg);
         }
 
-        /* Camiseta con Área de Estampado */
+        /* Camiseta con Tinte de Color Dinámico */
         .mockup-camiseta {
-            width: 240px; height: 260px;
-            background-image: url('https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=500&auto=format&fit=crop');
-            background-size: cover; background-position: center;
+            width: 250px; height: 250px;
+            background-size: contain; background-position: center; background-repeat: no-repeat;
+            background-blend-mode: multiply;
+            background-color: #ffffff;
             border-radius: 12px; display: flex; justify-content: center; align-items: center;
-            flex-shrink: 0;
+            flex-shrink: 0; transition: background-color 0.2s ease;
         }
         .area-impresion {
             width: 100px; height: 130px;
             border: 2px dashed var(--primary);
             background-size: cover; background-position: center;
-            border-radius: 4px; transform: translateY(-8px);
+            border-radius: 4px; transform: translateY(-5px);
         }
 
-        /* --- CONTROLES Y FORMULARIO --- */
+        /* --- UI CONTROLES --- */
         .form-controls { width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 10px; }
         .row-group { display: flex; gap: 8px; align-items: center; }
-        .row-group label { font-size: 0.78rem; font-weight: bold; width: 75px; color: #555; }
+        .row-group label { font-size: 0.78rem; font-weight: bold; width: 85px; color: #555; }
 
         input, select, button { padding: 9px 12px; border: 1px solid #ced4da; border-radius: 8px; font-size: 0.88rem; outline: none; width: 100%; }
+        
+        /* Switch de Fuente de Imagen */
+        .tab-selector { display: flex; background: #e2e8f0; border-radius: 8px; padding: 2px; gap: 2px; }
+        .tab-btn { border: none; padding: 6px; font-size: 0.78rem; font-weight: 600; background: transparent; cursor: pointer; border-radius: 6px; }
+        .tab-btn.active { background: white; color: var(--primary); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+
         .btn-action { background: var(--primary); color: white; border: none; padding: 11px; font-weight: 700; border-radius: 8px; cursor: pointer; }
         .btn-whatsapp { background: var(--success); color: white; border: none; padding: 11px; font-weight: 700; border-radius: 8px; cursor: pointer; }
 
@@ -146,43 +150,76 @@
                 </div>
 
                 <div class="form-controls">
+                    <!-- Selección de Producto -->
                     <div class="row-group">
-                        <select id="select-soporte" onchange="cambiarSoporte()">
+                        <label>Producto</label>
+                        <select id="select-soporte" onchange="actualizarInterfazSoporte()">
                             <option value="tarjeta">💳 Sticker Tarjeta</option>
                             <option value="camiseta">👕 Camiseta</option>
                         </select>
-                        <select id="select-orientacion" onchange="cambiarOrientacion()">
-                            <option value="horizontal">↔️ Horizontal</option>
-                            <option value="vertical">↕️ Vertical</option>
+                    </div>
+
+                    <!-- Controles Específicos para Tarjeta -->
+                    <div id="controles-tarjeta" class="form-controls">
+                        <div class="row-group">
+                            <label>Orientación</label>
+                            <select id="select-orientacion" onchange="cambiarOrientacion()">
+                                <option value="horizontal">↔️ Horizontal</option>
+                                <option value="vertical">↕️ Vertical</option>
+                            </select>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px; font-size:0.8rem; font-weight:bold;">
+                            <input type="checkbox" id="check-chip" checked onchange="toggleChip()" style="width:auto;">
+                            <label for="check-chip">Mostrar Chip de Tarjeta</label>
+                        </div>
+                    </div>
+
+                    <!-- Controles Específicos para Camiseta -->
+                    <div id="controles-camiseta" class="form-controls" style="display:none;">
+                        <div class="row-group">
+                            <label>Modelo</label>
+                            <select id="select-genero-camiseta" onchange="cambiarImagenCamiseta()">
+                                <option value="hombre">👨 Hombre</option>
+                                <option value="mujer">👩 Mujer</option>
+                            </select>
+                        </div>
+                        <div class="row-group">
+                            <label>Color Tela</label>
+                            <input type="color" id="color-camiseta" value="#ffffff" oninput="cambiarColorCamiseta()">
+                        </div>
+                    </div>
+
+                    <!-- Ajustes de Diseño (Zoom / Patrón) -->
+                    <div class="row-group">
+                        <label>Zoom</label>
+                        <input type="range" id="slider-zoom" min="30" max="250" value="100" oninput="ajustarImagen()">
+                    </div>
+                    <div class="row-group">
+                        <label>Modo Imagen</label>
+                        <select id="select-repeat" onchange="ajustarImagen()">
+                            <option value="no-repeat">🖼️ Imagen Única</option>
+                            <option value="repeat">🔁 Repetir (Patrón)</option>
                         </select>
                     </div>
 
-                    <div style="display:flex; align-items:center; gap:8px; font-size:0.8rem; font-weight:bold;">
-                        <input type="checkbox" id="check-chip" checked onchange="toggleChip()" style="width:auto;">
-                        <label for="check-chip">Mostrar Chip</label>
+                    <!-- Selector Inteligente Fuente Imagen -->
+                    <div class="tab-selector">
+                        <button class="tab-btn active" id="btn-tab-file" onclick="switchFuenteImagen('file')">📁 Cargar Archivo</button>
+                        <button class="tab-btn" id="btn-tab-url" onclick="switchFuenteImagen('url')">🔗 Desde URL</button>
                     </div>
 
-                    <div class="row-group">
-                        <label>Zoom</label>
-                        <input type="range" id="slider-zoom" min="50" max="250" value="100" oninput="ajustarImagen()">
+                    <div id="sec-input-file">
+                        <input type="file" id="file-input" accept="image/*" onchange="cargarFotoLocal(event)">
                     </div>
-                    <div class="row-group">
-                        <label>Posición X</label>
-                        <input type="range" id="slider-pos-x" min="0" max="100" value="50" oninput="ajustarImagen()">
-                    </div>
-                    <div class="row-group">
-                        <label>Posición Y</label>
-                        <input type="range" id="slider-pos-y" min="0" max="100" value="50" oninput="ajustarImagen()">
+                    <div id="sec-input-url" style="display:none;">
+                        <input type="text" id="url-input" placeholder="Pega el link de la imagen aquí..." oninput="cargarFotoURL()">
                     </div>
 
-                    <input type="file" id="file-input" accept="image/*" onchange="cargarFotoLocal(event)">
-                    <input type="text" id="url-input" placeholder="O pega el link de la imagen..." oninput="cargarFotoURL()">
-                    <input type="text" id="nombre-diseno" placeholder="Nombre del diseño (Ej: Naruto)">
-                    
+                    <input type="text" id="nombre-diseno" placeholder="Nombre del diseño (Ej: Naruto Modo Sabio)">
                     <input type="text" id="categoria-input" list="lista-categorias-dinamica" placeholder="Categoría (Ej: Anime)">
                     <datalist id="lista-categorias-dinamica"></datalist>
 
-                    <button class="btn-action" onclick="guardarDisenoComunitario()">✨ Guardar en Catálogo</button>
+                    <button class="btn-action" onclick="guardarDisenoComunitario()">✨ Publicar en Catálogo</button>
                     <button class="btn-whatsapp" onclick="pedirPorWhatsApp()">💬 Pedir por WhatsApp</button>
                 </div>
             </div>
@@ -190,7 +227,7 @@
 
         <!-- VISTA CATÁLOGO -->
         <section id="view-catalogo" class="section-view">
-            <h3 style="margin-bottom: 8px;">🛍️ Catálogo</h3>
+            <h3 style="margin-bottom: 8px;">🛍️ Catálogo Comunitario</h3>
             <input type="text" id="buscar-catalogo" placeholder="🔍 Buscar..." oninput="renderCatalogo()" style="margin-bottom: 8px;">
             <div id="tags-bar" style="margin-bottom: 8px; overflow-x: auto; white-space: nowrap;"></div>
             <div class="scrollable-content">
@@ -198,11 +235,11 @@
             </div>
         </section>
 
-        <!-- VISTA PERFIL E ID ANÓNIMO -->
+        <!-- VISTA PERFIL DE USUARIO -->
         <aside id="view-perfil" class="section-view">
             <h3>👤 Perfil de Usuario</h3>
             <div style="background:#e2e8f0; padding:10px; border-radius:8px; margin: 10px 0; font-size:0.85rem;">
-                <strong>Tu ID de Cliente:</strong> <span id="user-id-display" style="color:var(--primary);"></span>
+                <strong>ID de Cliente:</strong> <span id="user-id-display" style="color:var(--primary);"></span>
             </div>
             <div style="display:flex; flex-direction:column; gap:8px;">
                 <input type="text" id="perfil-nombre" placeholder="Nombre opcional">
@@ -221,16 +258,22 @@
     <div id="toast"></div>
 
     <script>
-        // IDENTIFICADOR ÚNICO DE USUARIO
+        // CONFIGURACIÓN Y ESTADO
+        const GAS_WEB_APP_URL = ""; // Coloca aquí tu URL de Google Apps Script cuando esté desplegado.
+        
         let userId = localStorage.getItem('user_id') || 'USR-' + Math.floor(1000 + Math.random() * 9000);
         localStorage.setItem('user_id', userId);
 
         let currentImgUrl = "";
         let tagSeleccionado = "Todos";
+        
+        const CAMISETA_HOMBRE_URL = "https://www.sobretodo.es/wp-content/uploads/2020/08/camiseta-hombre-basica-front.jpg";
+        const CAMISETA_MUJER_URL = "https://tse4.mm.bing.net/th/id/OIP.TjHELaewDFcNmGoMGXektgHaHa?r=0&dpr=2.8&pid=ImgDetMain&o=7&rm=3";
+
         let categoriasDinamicas = JSON.parse(localStorage.getItem('categorias_db')) || [
-            { nombre: 'Anime', uso: 10 },
+            { nombre: 'Anime', uso: 12 },
             { nombre: 'Geek', uso: 8 },
-            { nombre: 'Gaming', uso: 5 }
+            { nombre: 'Gaming', uso: 6 }
         ];
 
         let catalogoGlobal = JSON.parse(localStorage.getItem('catalogo_local')) || [];
@@ -242,14 +285,22 @@
             renderCatalogo();
         });
 
-        // --- MOCKUP FIX & CONTROLES ---
-        function cambiarSoporte() {
+        // --- INTERFAZ ADAPTATIVA Y CONTROL VISUAL ---
+        function actualizarInterfazSoporte() {
             const soporte = document.getElementById('select-soporte').value;
             const wrapper = document.getElementById('contenedor-mockup');
+            const controlesTarjeta = document.getElementById('controles-tarjeta');
+            const controlesCamiseta = document.getElementById('controles-camiseta');
 
             if (soporte === 'camiseta') {
-                wrapper.innerHTML = `<div class="mockup-camiseta"><div class="area-impresion" id="sticker-preview"></div></div>`;
+                controlesTarjeta.style.display = 'none';
+                controlesCamiseta.style.display = 'flex';
+                wrapper.innerHTML = `<div class="mockup-camiseta" id="tshirt-base"><div class="area-impresion" id="sticker-preview"></div></div>`;
+                cambiarImagenCamiseta();
+                cambiarColorCamiseta();
             } else {
+                controlesTarjeta.style.display = 'flex';
+                controlesCamiseta.style.display = 'none';
                 wrapper.innerHTML = `<div class="tarjeta-mockup" id="sticker-preview"><div class="chip" id="card-chip"></div></div>`;
                 cambiarOrientacion();
                 toggleChip();
@@ -272,16 +323,37 @@
             if (chip) chip.style.display = checked ? 'block' : 'none';
         }
 
+        function cambiarImagenCamiseta() {
+            const genero = document.getElementById('select-genero-camiseta').value;
+            const tshirtBase = document.getElementById('tshirt-base');
+            if (tshirtBase) {
+                const urlImg = (genero === 'hombre') ? CAMISETA_HOMBRE_URL : CAMISETA_MUJER_URL;
+                tshirtBase.style.backgroundImage = `url('${urlImg}')`;
+            }
+        }
+
+        function cambiarColorCamiseta() {
+            const color = document.getElementById('color-camiseta').value;
+            const tshirtBase = document.getElementById('tshirt-base');
+            if (tshirtBase) tshirtBase.style.backgroundColor = color;
+        }
+
+        function switchFuenteImagen(tipo) {
+            document.getElementById('btn-tab-file').classList.toggle('active', tipo === 'file');
+            document.getElementById('btn-tab-url').classList.toggle('active', tipo === 'url');
+            document.getElementById('sec-input-file').style.display = tipo === 'file' ? 'block' : 'none';
+            document.getElementById('sec-input-url').style.display = tipo === 'url' ? 'block' : 'none';
+        }
+
         function ajustarImagen() {
             const preview = document.getElementById('sticker-preview');
             const zoom = document.getElementById('slider-zoom').value;
-            const posX = document.getElementById('slider-pos-x').value;
-            const posY = document.getElementById('slider-pos-y').value;
+            const repeat = document.getElementById('select-repeat').value;
 
             if (preview && currentImgUrl) {
                 preview.style.backgroundImage = `url('${currentImgUrl}')`;
                 preview.style.backgroundSize = `${zoom}%`;
-                preview.style.backgroundPosition = `${posX}% ${posY}%`;
+                preview.style.backgroundRepeat = repeat;
             }
         }
 
@@ -301,34 +373,45 @@
             }
         }
 
-        // --- CATEGORÍAS Y GUARDADO ---
-        function actualizarDatalistCategorias() {
-            categoriasDinamicas.sort((a, b) => b.uso - a.uso);
-            localStorage.setItem('categorias_db', JSON.stringify(categoriasDinamicas));
-            document.getElementById('lista-categorias-dinamica').innerHTML = 
-                categoriasDinamicas.map(c => `<option value="${c.nombre}">`).join('');
-        }
-
+        // --- PUBLICACIÓN Y INTEGRACIÓN CON GOOGLE APPS SCRIPT ---
         function guardarDisenoComunitario() {
             const nombre = document.getElementById('nombre-diseno').value.trim() || "Diseño sin nombre";
             const categoria = document.getElementById('categoria-input').value.trim() || "Geek";
 
             if (!currentImgUrl) {
-                mostrarToast("⚠️ Sube o pega una imagen primero.");
+                mostrarToast("⚠️ Añade una imagen primero.");
                 return;
             }
 
-            const catExistente = categoriasDinamicas.find(c => c.nombre.toLowerCase() === categoria.toLowerCase());
-            if (catExistente) catExistente.uso += 1;
-            else categoriasDinamicas.push({ nombre: categoria, uso: 1 });
-            actualizarDatalistCategorias();
+            const payload = { id: Date.now(), userId, nombre, tag: categoria, url: currentImgUrl };
 
-            const nuevoItem = { id: Date.now(), userId, nombre, tag: categoria, url: currentImgUrl };
-            catalogoGlobal.unshift(nuevoItem);
+            // Guardado Local
+            catalogoGlobal.unshift(payload);
             localStorage.setItem('catalogo_local', JSON.stringify(catalogoGlobal));
 
-            mostrarToast("✨ ¡Diseño guardado!");
+            // Sincronización con Google Apps Script (Ligero)
+            enviarAGoogleAppsScript(payload);
+
+            mostrarToast("✨ Publicado exitosamente");
             renderCatalogo();
+        }
+
+        function enviarAGoogleAppsScript(datos) {
+            if (!GAS_WEB_APP_URL) return; // Si aún no se ha configurado la URL de Apps Script
+
+            fetch(GAS_WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datos)
+            }).catch(e => console.error("Error al enviar a GAS:", e));
+        }
+
+        // --- CATÁLOGO & PERFIL ---
+        function actualizarDatalistCategorias() {
+            categoriasDinamicas.sort((a, b) => b.uso - a.uso);
+            document.getElementById('lista-categorias-dinamica').innerHTML = 
+                categoriasDinamicas.map(c => `<option value="${c.nombre}">`).join('');
         }
 
         function renderCatalogo() {
@@ -343,14 +426,8 @@
 
             const filtrados = catalogoGlobal.filter(item => {
                 const cumpleTag = tagSeleccionado === 'Todos' || item.tag === tagSeleccionado;
-                const cumpleTexto = item.nombre.toLowerCase().includes(busqueda) || item.tag.toLowerCase().includes(busqueda);
-                return cumpleTag && cumpleTexto;
+                return cumpleTag && (item.nombre.toLowerCase().includes(busqueda) || item.tag.toLowerCase().includes(busqueda));
             });
-
-            if (filtrados.length === 0) {
-                contenedor.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:20px; color:#aaa;">Catálogo vacío.</div>`;
-                return;
-            }
 
             contenedor.innerHTML = filtrados.map(item => `
                 <div class="card-item" onclick="seleccionarDelCatalogo('${item.url}')">
@@ -363,10 +440,7 @@
             `).join('');
         }
 
-        function filtrarPorTag(tag) {
-            tagSeleccionado = tag;
-            renderCatalogo();
-        }
+        function filtrarPorTag(tag) { tagSeleccionado = tag; renderCatalogo(); }
 
         function seleccionarDelCatalogo(url) {
             currentImgUrl = url;
@@ -375,19 +449,17 @@
         }
 
         function pedirPorWhatsApp() {
-            const nombre = document.getElementById('nombre-diseno').value || "Sticker Personalizado";
+            const nombre = document.getElementById('nombre-diseno').value || "Diseño Personalizado";
             const contacto = localStorage.getItem('user_contact') || "Cliente";
 
-            const mensaje = encodeURIComponent(`Hola! Quiero encargar este diseño:\n📌 ID: ${userId}\n📌 Nombre: ${nombre}\n👤 Contacto: ${contacto}\n🖼️ Imagen: ${currentImgUrl}`);
+            const mensaje = encodeURIComponent(`Hola! Deseo ordenar este producto:\n📌 ID Usuario: ${userId}\n📌 Diseño: ${nombre}\n👤 Contacto: ${contacto}\n🖼️ Link: ${currentImgUrl}`);
             window.open(`https://wa.me/?text=${mensaje}`, '_blank');
         }
 
         function guardarPerfilLocal() {
-            const nombre = document.getElementById('perfil-nombre').value;
-            const contacto = document.getElementById('perfil-contacto').value;
-            localStorage.setItem('user_name', nombre);
-            localStorage.setItem('user_contact', contacto);
-            mostrarToast("👤 Perfil guardado.");
+            localStorage.setItem('user_name', document.getElementById('perfil-nombre').value);
+            localStorage.setItem('user_contact', document.getElementById('perfil-contacto').value);
+            mostrarToast("👤 Datos guardados.");
         }
 
         function cargarPerfilGuardado() {
