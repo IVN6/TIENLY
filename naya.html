@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,85 +6,118 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sticker & Design Studio</title>
+    <title>Sticker & Design Studio - Naya</title>
     <style>
         :root {
             --primary: #6f42c1;
             --primary-light: #f3f0ff;
+            --success: #25D366;
             --dark: #1e1e24;
-            --bg-interno: #f8f9fa;
-            --border: #e2e8f0;
+            --bg-interno: #f1f3f5;
+            --border: #e9ecef;
             --nav-height: 70px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg-interno); color: var(--dark); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-interno);
+            color: var(--dark);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            user-select: none;
+        }
 
-        /* --- APP CONTAINER & NAVIGATION --- */
+        /* --- APP STRUCTURE --- */
         .app-container { display: flex; flex: 1; height: calc(100vh - var(--nav-height)); overflow: hidden; position: relative; }
-        .section-view { display: none; flex-direction: column; width: 100%; height: 100%; padding: 20px; overflow: hidden; background: #fff; }
+        .section-view { display: none; flex-direction: column; width: 100%; height: 100%; padding: 18px; overflow: hidden; background: #ffffff; }
         .section-view.active { display: flex; }
-        .scrollable-content { flex: 1; overflow-y: auto; padding-bottom: 80px; }
+        .scrollable-content { flex: 1; overflow-y: auto; padding-bottom: 90px; }
 
-        .mobile-nav { display: flex; background: white; border-top: 1px solid var(--border); height: var(--nav-height); position: fixed; bottom: 0; width: 100%; z-index: 2000; }
+        .mobile-nav { display: flex; background: white; border-top: 1px solid var(--border); height: var(--nav-height); position: fixed; bottom: 0; width: 100%; z-index: 2000; box-shadow: 0 -4px 20px rgba(0,0,0,0.04); }
         .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 600; color: #868e96; background: none; border: none; cursor: pointer; gap: 4px; }
         .nav-tab.active { color: var(--primary); background: var(--primary-light); }
 
         /* --- MOCKUP WORKSPACE --- */
         .render-container { display: flex; flex-direction: column; align-items: center; gap: 15px; }
-        .mockup-wrapper { width: 100%; max-width: 360px; height: 320px; display: flex; justify-content: center; align-items: center; background: #f1f3f5; border-radius: 16px; border: 2px dashed var(--border); position: relative; overflow: hidden; }
+        .mockup-wrapper {
+            width: 100%; max-width: 350px; height: 320px;
+            display: flex; justify-content: center; align-items: center;
+            background: #f8f9fa; border-radius: 16px; border: 2px dashed #cbd5e1;
+            position: relative; overflow: hidden;
+        }
 
-        /* Tarjeta Base */
+        /* Tarjeta de Crédito (Estilo Elegante Original) */
         .tarjeta-mockup {
             width: 300px; height: 188px;
             border-radius: 12px;
-            background-color: #2b2d42;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            background: linear-gradient(135deg, #1f1c2c 0%, #928dab 100%);
+            background-size: cover; background-position: center;
             position: relative;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
-            transition: width 0.3s, height 0.3s, border-radius 0.3s;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.15);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             overflow: hidden;
         }
-
-        /* Orientación Vertical */
         .tarjeta-mockup.vertical { width: 188px; height: 300px; }
 
-        /* Chip Interactivo */
-        .tarjeta-mockup .chip {
-            width: 44px; height: 32px;
-            background: linear-gradient(135deg, #ffd700 0%, #cca100 100%);
-            border-radius: 5px; position: absolute; top: 45%; left: 20px;
-            transform: translateY(-50%); z-index: 3; border: 1px solid rgba(0,0,0,0.2);
-            display: block;
+        .tarjeta-mockup::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 60%);
+            pointer-events: none; z-index: 2;
         }
-        .tarjeta-mockup.no-chip .chip { display: none !important; }
 
-        /* Modificadores Camiseta y Termo */
-        .tarjeta-mockup.tipo-Camiseta { width: 220px; height: 240px; border-radius: 10px 10px 40px 40px; background-color: #ffffff; border: 1px solid var(--border); }
-        .tarjeta-mockup.tipo-Camiseta .chip { display: none !important; }
-        .tarjeta-mockup.tipo-Termo { width: 130px; height: 250px; border-radius: 12px 12px 25px 25px; clip-path: polygon(5% 0%, 95% 0%, 85% 100%, 15% 100%); }
-        .tarjeta-mockup.tipo-Termo .chip { display: none !important; }
+        /* Chip Realista con Circuitos */
+        .tarjeta-mockup .chip {
+            width: 44px; height: 34px;
+            background: linear-gradient(135deg, #ffd700 0%, #cca100 50%, #ffeb7a 100%);
+            border-radius: 6px; position: absolute; top: 45%; left: 22px;
+            transform: translateY(-50%); z-index: 3;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.3); border: 1px solid rgba(0,0,0,0.15);
+        }
+        .tarjeta-mockup .chip::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                linear-gradient(90deg, transparent 46%, rgba(0,0,0,0.25) 47%, rgba(0,0,0,0.25) 53%, transparent 54%),
+                linear-gradient(0deg, transparent 46%, rgba(0,0,0,0.25) 47%, rgba(0,0,0,0.25) 53%, transparent 54%);
+        }
 
-        /* --- FORMULARIOS Y CONTROLES --- */
-        .form-controls { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 10px; }
-        .control-group { display: flex; gap: 8px; align-items: center; }
-        .control-group label { font-size: 0.8rem; font-weight: bold; width: 90px; color: #555; }
-        
-        input, select, textarea, button { padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none; width: 100%; }
-        input[type="range"] { padding: 0; }
-        
-        .btn-action { background: var(--primary); color: white; border: none; padding: 12px; font-weight: bold; cursor: pointer; border-radius: 8px; }
-        .btn-action:active { transform: scale(0.98); }
+        /* --- MOCKUP CAMISETA (Imagen Real) --- */
+        .mockup-camiseta {
+            width: 280px; height: 300px;
+            background-image: url('https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=600&auto=format&fit=crop');
+            background-size: cover; background-position: center;
+            border-radius: 12px; display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .area-impresion {
+            width: 110px; height: 140px;
+            border: 2px dashed rgba(111, 66, 193, 0.7);
+            background-size: cover; background-position: center;
+            border-radius: 6px; transform: translateY(-10px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        /* --- CONTROLES Y FORMULARIOS --- */
+        .form-controls { width: 100%; max-width: 350px; display: flex; flex-direction: column; gap: 10px; }
+        .row-group { display: flex; gap: 8px; align-items: center; }
+        .row-group label { font-size: 0.8rem; font-weight: bold; width: 80px; color: #555; }
+
+        input, select, button { padding: 10px 12px; border: 1px solid #ced4da; border-radius: 8px; font-size: 0.9rem; outline: none; width: 100%; }
+        input:focus, select:focus { border-color: var(--primary); }
+
+        .btn-action { background: var(--primary); color: white; border: none; padding: 12px; font-weight: 700; border-radius: 8px; cursor: pointer; }
+        .btn-whatsapp { background: var(--success); color: white; border: none; padding: 12px; font-weight: 700; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
         /* --- CATÁLOGO --- */
-        .grid-catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
-        .card-item { background: white; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; cursor: pointer; }
-        .card-img { width: 100%; height: 110px; background-size: cover; background-position: center; background-color: #eee; }
+        .grid-catalogo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .card-item { background: white; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.03); }
+        .card-img { width: 100%; height: 110px; background-size: cover; background-position: center; background-color: #e9ecef; }
         .card-info { padding: 8px; font-size: 0.8rem; }
 
-        .tag-badge { background: #e9ecef; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; cursor: pointer; display: inline-block; margin-right: 4px; }
+        .tag-badge { background: #e9ecef; padding: 5px 12px; border-radius: 15px; font-size: 0.75rem; font-weight: 600; cursor: pointer; display: inline-block; white-space: nowrap; margin-right: 5px; }
         .tag-badge.active { background: var(--primary); color: white; }
 
         #toast { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); background: var(--dark); color: white; padding: 10px 20px; border-radius: 20px; font-size: 0.85rem; opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 3000; }
@@ -106,72 +138,78 @@
             <h3 style="margin-bottom: 10px;">🎨 Personalizador de Sticker</h3>
             <div class="scrollable-content render-container">
                 
-                <div class="mockup-wrapper">
+                <div class="mockup-wrapper" id="contenedor-mockup">
                     <div class="tarjeta-mockup" id="sticker-preview">
                         <div class="chip" id="card-chip"></div>
                     </div>
                 </div>
 
                 <div class="form-controls">
-                    <!-- Ajustes de plantilla -->
-                    <div class="control-group">
-                        <select id="select-tipo" onchange="actualizarPlantilla()">
-                            <option value="Tarjeta">💳 Tarjeta / Sticker</option>
-                            <option value="Camiseta">👕 Camiseta</option>
-                            <option value="Termo">🥤 Termo / Vaso</option>
+                    <div class="row-group">
+                        <select id="select-soporte" onchange="cambiarSoporte()">
+                            <option value="tarjeta">💳 Sticker para Tarjeta</option>
+                            <option value="camiseta">👕 Visualizar en Camiseta</option>
                         </select>
-                        <select id="select-orientacion" onchange="actualizarPlantilla()">
+                        <select id="select-orientacion" onchange="cambiarOrientacion()">
                             <option value="horizontal">↔️ Horizontal</option>
                             <option value="vertical">↕️ Vertical</option>
                         </select>
                     </div>
 
-                    <!-- Toggle del Chip -->
-                    <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600;">
-                        <input type="checkbox" id="check-chip" checked onchange="actualizarPlantilla()" style="width: auto;">
+                    <div style="display:flex; align-items:center; gap:8px; font-size:0.8rem; font-weight:bold;">
+                        <input type="checkbox" id="check-chip" checked onchange="toggleChip()" style="width:auto;">
                         <label for="check-chip">Mostrar Chip de Tarjeta</label>
                     </div>
 
-                    <!-- Ajustes de Imagen (Zoom & Posición) -->
-                    <div class="control-group">
+                    <!-- Zoom y Ajuste de Fondo -->
+                    <div class="row-group">
                         <label>Zoom</label>
-                        <input type="range" id="zoom-img" min="50" max="250" value="100" oninput="aplicarEstilosImagen()">
+                        <input type="range" id="slider-zoom" min="50" max="250" value="100" oninput="ajustarImagen()">
                     </div>
-                    <div class="control-group">
+                    <div class="row-group">
                         <label>Posición X</label>
-                        <input type="range" id="pos-x" min="0" max="100" value="50" oninput="aplicarEstilosImagen()">
+                        <input type="range" id="slider-pos-x" min="0" max="100" value="50" oninput="ajustarImagen()">
                     </div>
-                    <div class="control-group">
+                    <div class="row-group">
                         <label>Posición Y</label>
-                        <input type="range" id="pos-y" min="0" max="100" value="50" oninput="aplicarEstilosImagen()">
+                        <input type="range" id="slider-pos-y" min="0" max="100" value="50" oninput="ajustarImagen()">
                     </div>
 
-                    <!-- Entradas de datos -->
-                    <input type="file" id="file-input" accept="image/*" onchange="cargarImagenLocal(event)">
-                    <input type="text" id="url-input" placeholder="O pega el link de la imagen..." oninput="cargarImagenURL()">
-                    <input type="text" id="nombre-diseno" placeholder="Nombre del diseño (Ej: Cyberpunk)">
-                    <input type="text" id="tag-diseno" placeholder="Categoría / Tag (Ej: Anime)">
-                    <input type="text" id="contacto-cliente" placeholder="Tu WhatsApp o Instagram">
+                    <!-- Carga de Imagen y Categorías -->
+                    <input type="file" id="file-input" accept="image/*" onchange="cargarFotoLocal(event)">
+                    <input type="text" id="url-input" placeholder="O pega el link de la imagen..." oninput="cargarFotoURL()">
+                    
+                    <input type="text" id="nombre-diseno" placeholder="Nombre del diseño (Ej: Naruto Modo Sabio)">
+                    
+                    <!-- Categoria dinámica con autocompletado y ranking -->
+                    <input type="text" id="categoria-input" list="lista-categorias-dinamica" placeholder="Escribe o elige una categoría (Ej: Anime)">
+                    <datalist id="lista-categorias-dinamica"></datalist>
 
-                    <button class="btn-action" onclick="guardarDiseno()">Publicar / Encargar</button>
+                    <button class="btn-action" onclick="guardarDisenoComunitario()">✨ Publicar en Catálogo</button>
+                    <button class="btn-whatsapp" onclick="pedirPorWhatsApp()">💬 Pedir por WhatsApp</button>
                 </div>
             </div>
         </main>
 
         <!-- VISTA CATÁLOGO -->
         <section id="view-catalogo" class="section-view">
-            <h3 style="margin-bottom: 10px;">🛍️ Catálogo</h3>
-            <input type="text" id="buscar-catalogo" placeholder="🔍 Buscar..." oninput="renderCatalogo()" style="margin-bottom: 10px;">
-            <div id="tags-container" style="margin-bottom: 10px; overflow-x: auto; white-space: nowrap;"></div>
+            <h3 style="margin-bottom: 10px;">🛍️ Catálogo Comunitario</h3>
+            <input type="text" id="buscar-catalogo" placeholder="🔍 Buscar por nombre o tag..." oninput="renderCatalogo()" style="margin-bottom: 10px;">
+            <div id="tags-bar" style="margin-bottom: 10px; overflow-x: auto; white-space: nowrap;"></div>
             <div class="scrollable-content">
                 <div class="grid-catalogo" id="contenedor-catalogo"></div>
             </div>
         </section>
 
-        <!-- VISTA MONITOR / BACKEND -->
-        <aside id="view-monitor" class="section-view">
-            <h3>🖥️ Pedidos Recibidos</h3>
-            <div class="scrollable-content" id="lista-pedidos" style="margin-top: 10px;"></div>
+        <!-- VISTA PERFIL DE USUARIO (Reducción de Fricción) -->
+        <aside id="view-perfil" class="section-view">
+            <h3>👤 Mi Perfil / Datos de Envío</h3>
+            <p style="font-size:0.8rem; color:#666; margin: 8px 0 15px 0;">Guarda tu contacto una sola vez para no tener que escribirlo en cada diseño.</p>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <input type="text" id="perfil-nombre" placeholder="Tu Nombre o Apodo">
+                <input type="text" id="perfil-contacto" placeholder="Tu WhatsApp o @Instagram">
+                <button class="btn-action" onclick="guardarPerfilLocal()">💾 Guardar Perfil</button>
+            </div>
         </aside>
     </div>
 
@@ -179,190 +217,193 @@
     <nav class="mobile-nav">
         <button class="nav-tab active" onclick="switchTab('view-render', this)">🎨 Editor</button>
         <button class="nav-tab" onclick="switchTab('view-catalogo', this)">🛍️ Catálogo</button>
-        <button class="nav-tab" onclick="switchTab('view-monitor', this)">🖥️ Pedidos</button>
+        <button class="nav-tab" onclick="switchTab('view-perfil', this)">👤 Perfil</button>
     </nav>
 
     <div id="toast"></div>
 
     <script>
-        // CONFIGURACIÓN BACKEND (Coloca la URL desplegada de Google Apps Script)
-        const GAS_URL = ""; 
+        // ESTADO Y CATEGORÍAS RANKEADAS POR USO
+        let currentImgUrl = "";
+        let tagSeleccionado = "Todos";
+        let categoriasDinamicas = JSON.parse(localStorage.getItem('categorias_db')) || [
+            { nombre: 'Anime', uso: 15 },
+            { nombre: 'Geek', uso: 10 },
+            { nombre: 'Gaming', uso: 8 },
+            { nombre: 'Música', uso: 5 }
+        ];
 
-        // ESTADO GLOBAL
-        let currentImageSrc = "";
-        let db;
-        let catalogoGlobal = [];
-        let pedidosGlobal = [];
-        let tagActivo = "Todos";
-
-        // INICIALIZACIÓN INDEXEDDB (Para guardar localmente sin límites de memory/localStorage)
-        const request = indexedDB.open("StickerStudioDB", 1);
-        request.onupgradeneeded = (e) => {
-            db = e.target.result;
-            db.createObjectStore("misDisenos", { keyPath: "id", autoIncrement: true });
-        };
-        request.onsuccess = (e) => {
-            db = e.target.result;
-            cargarDisenosLocales();
-        };
+        let catalogoGlobal = JSON.parse(localStorage.getItem('catalogo_local')) || [];
 
         window.addEventListener('DOMContentLoaded', () => {
-            sincronizarConBackend();
+            actualizarDatalistCategorias();
+            cargarPerfilGuardado();
+            renderCatalogo();
         });
 
-        // --- MANEJO DE MOCKUP Y STYLES ---
-        function actualizarPlantilla() {
+        // --- MOCKUP LOGIC ---
+        function cambiarSoporte() {
+            const soporte = document.getElementById('select-soporte').value;
+            const wrapper = document.getElementById('contenedor-mockup');
+
+            if (soporte === 'camiseta') {
+                wrapper.innerHTML = `<div class="mockup-camiseta"><div class="area-impresion" id="sticker-preview"></div></div>`;
+            } else {
+                wrapper.innerHTML = `<div class="tarjeta-mockup" id="sticker-preview"><div class="chip" id="card-chip"></div></div>`;
+                cambiarOrientacion();
+                toggleChip();
+            }
+            ajustarImagen();
+        }
+
+        function cambiarOrientacion() {
             const preview = document.getElementById('sticker-preview');
-            const tipo = document.getElementById('select-tipo').value;
             const orientacion = document.getElementById('select-orientacion').value;
-            const tieneChip = document.getElementById('check-chip').checked;
-
-            preview.className = `tarjeta-mockup tipo-${tipo} ${orientacion}`;
-            if (!tieneChip) preview.classList.add('no-chip');
-            else preview.classList.remove('no-chip');
-        }
-
-        function aplicarEstilosImagen() {
-            const preview = document.getElementById('sticker-preview');
-            const zoom = document.getElementById('zoom-img').value;
-            const posX = document.getElementById('pos-x').value;
-            const posY = document.getElementById('pos-y').value;
-
-            preview.style.backgroundImage = `url('${currentImageSrc}')`;
-            preview.style.backgroundSize = `${zoom}%`;
-            preview.style.backgroundPosition = `${posX}% ${posY}%`;
-        }
-
-        function cargarImagenLocal(event) {
-            const file = event.target.files[0];
-            if (file) {
-                // Genera URL temporal en memoria RAM (Zero consumo de almacenamiento)
-                currentImageSrc = URL.createObjectURL(file);
-                aplicarEstilosImagen();
+            if (preview && preview.classList.contains('tarjeta-mockup')) {
+                if (orientacion === 'vertical') preview.classList.add('vertical');
+                else preview.classList.remove('vertical');
             }
         }
 
-        function cargarImagenURL() {
+        function toggleChip() {
+            const chip = document.getElementById('card-chip');
+            const checked = document.getElementById('check-chip').checked;
+            if (chip) chip.style.display = checked ? 'block' : 'none';
+        }
+
+        function ajustarImagen() {
+            const preview = document.getElementById('sticker-preview');
+            const zoom = document.getElementById('slider-zoom').value;
+            const posX = document.getElementById('slider-pos-x').value;
+            const posY = document.getElementById('slider-pos-y').value;
+
+            if (preview && currentImgUrl) {
+                preview.style.backgroundImage = `url('${currentImgUrl}')`;
+                preview.style.backgroundSize = `${zoom}%`;
+                preview.style.backgroundPosition = `${posX}% ${posY}%`;
+            }
+        }
+
+        function cargarFotoLocal(e) {
+            const file = e.target.files[0];
+            if (file) {
+                currentImgUrl = URL.createObjectURL(file);
+                ajustarImagen();
+            }
+        }
+
+        function cargarFotoURL() {
             const url = document.getElementById('url-input').value.trim();
             if (url) {
-                currentImageSrc = url;
-                aplicarEstilosImagen();
+                currentImgUrl = url;
+                ajustarImagen();
             }
         }
 
-        // --- GUARDADO Y PROCESAMIENTO ---
-        async function guardarDiseno() {
-            const nombre = document.getElementById('nombre-diseno').value.trim() || "Sin Nombre";
-            const tag = document.getElementById('tag-diseno').value.trim() || "General";
-            const contacto = document.getElementById('contacto-cliente').value.trim();
+        // --- CATEGORÍAS INTELIGENTES Y PUBLICACIÓN ---
+        function actualizarDatalistCategorias() {
+            // Ordena categorías por uso descendente
+            categoriasDinamicas.sort((a, b) => b.uso - a.uso);
+            localStorage.setItem('categorias_db', JSON.stringify(categoriasDinamicas));
 
-            if (!contacto) {
-                mostrarToast("⚠️ Añade tu contacto para procesar.");
+            const datalist = document.getElementById('lista-categorias-dinamica');
+            datalist.innerHTML = categoriasDinamicas.map(c => `<option value="${c.nombre}">`).join('');
+        }
+
+        function registrarONutrirCategoria(nombreCat) {
+            const existe = categoriasDinamicas.find(c => c.nombre.toLowerCase() === nombreCat.toLowerCase());
+            if (existe) {
+                existe.uso += 1;
+            } else {
+                categoriasDinamicas.push({ nombre: nombreCat, uso: 1 });
+            }
+            actualizarDatalistCategorias();
+        }
+
+        function guardarDisenoComunitario() {
+            const nombre = document.getElementById('nombre-diseno').value.trim() || "Diseño sin nombre";
+            const categoria = document.getElementById('categoria-input').value.trim() || "Geek";
+
+            if (!currentImgUrl) {
+                mostrarToast("⚠️ Sube o pega una imagen primero.");
                 return;
             }
 
-            const nuevoItem = { nombre, tag, contacto, url: currentImageSrc, fecha: new Date().toISOString() };
+            registrarONutrirCategoria(categoria);
 
-            // 1. Guardado local en IndexedDB
-            const tx = db.transaction(["misDisenos"], "readwrite");
-            tx.objectStore("misDisenos").add(nuevoItem);
+            const nuevoItem = { id: Date.now(), nombre, tag: categoria, url: currentImgUrl };
+            catalogoGlobal.unshift(nuevoItem);
+            localStorage.setItem('catalogo_local', JSON.stringify(catalogoGlobal));
 
-            // 2. Enviar a Google Apps Script si está configurado
-            if (GAS_URL) {
-                try {
-                    await fetch(GAS_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(nuevoItem)
-                    });
-                } catch (e) { console.error(e); }
-            }
-
-            mostrarToast("🚀 ¡Diseño registrado!");
-            cargarDisenosLocales();
-            limpiarFormulario();
+            mostrarToast("✨ ¡Diseño añadido al catálogo!");
+            renderCatalogo();
         }
 
-        function cargarDisenosLocales() {
-            if (!db) return;
-            const tx = db.transaction(["misDisenos"], "readonly");
-            const store = tx.objectStore("misDisenos");
-            const req = store.getAll();
-            req.onsuccess = () => {
-                catalogoGlobal = req.result;
-                renderCatalogo();
-            };
-        }
-
-        async function sincronizarConBackend() {
-            if (!GAS_URL) return;
-            try {
-                const res = await fetch(GAS_URL);
-                const data = await res.json();
-                if (data.catalogo) {
-                    catalogoGlobal = [...catalogoGlobal, ...data.catalogo];
-                    renderCatalogo();
-                }
-                if (data.pedidos) {
-                    pedidosGlobal = data.pedidos;
-                    renderPedidos();
-                }
-            } catch (e) {
-                console.log("Servidor backend no disponible.");
-            }
-        }
-
-        // --- RENDERIZADO DE VISTAS ---
         function renderCatalogo() {
             const contenedor = document.getElementById('contenedor-catalogo');
             const busqueda = document.getElementById('buscar-catalogo').value.toLowerCase();
+            const tagsBar = document.getElementById('tags-bar');
 
-            // Tags
-            const tags = ['Todos', ...new Set(catalogoGlobal.map(i => i.tag))];
-            document.getElementById('tags-container').innerHTML = tags.map(t => `
-                <span class="tag-badge ${tagActivo === t ? 'active' : ''}" onclick="filtrarTag('${t}')">${t}</span>
+            // Renderizado de Filtros de Tag
+            const tagsUnicos = ['Todos', ...new Set(categoriasDinamicas.map(c => c.nombre))];
+            tagsBar.innerHTML = tagsUnicos.map(t => `
+                <span class="tag-badge ${tagSeleccionado === t ? 'active' : ''}" onclick="filtrarPorTag('${t}')">${t}</span>
             `).join('');
 
-            const filtrados = catalogoGlobal.filter(i => {
-                const matchTag = tagActivo === 'Todos' || i.tag === tagActivo;
-                const matchTxt = i.nombre.toLowerCase().includes(busqueda) || i.tag.toLowerCase().includes(busqueda);
-                return matchTag && matchTxt;
+            const filtrados = catalogoGlobal.filter(item => {
+                const cumpleTag = tagSeleccionado === 'Todos' || item.tag === tagSeleccionado;
+                const cumpleTexto = item.nombre.toLowerCase().includes(busqueda) || item.tag.toLowerCase().includes(busqueda);
+                return cumpleTag && cumpleTexto;
             });
+
+            if (filtrados.length === 0) {
+                contenedor.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:20px; color:#aaa;">No hay diseños aquí aún.</div>`;
+                return;
+            }
 
             contenedor.innerHTML = filtrados.map(item => `
                 <div class="card-item" onclick="seleccionarDelCatalogo('${item.url}')">
                     <div class="card-img" style="background-image: url('${item.url}')"></div>
                     <div class="card-info">
                         <strong>${item.nombre}</strong><br>
-                        <span style="color:var(--primary)">🏷️ ${item.tag}</span>
+                        <span style="color:var(--primary); font-size:0.75rem;">🏷️ ${item.tag}</span>
                     </div>
                 </div>
             `).join('');
         }
 
-        function seleccionarDelCatalogo(url) {
-            currentImageSrc = url;
-            aplicarEstilosImagen();
-            switchTab('view-render', document.querySelectorAll('.nav-tab')[0]);
-        }
-
-        function filtrarTag(tag) {
-            tagActivo = tag;
+        function filtrarPorTag(tag) {
+            tagSeleccionado = tag;
             renderCatalogo();
         }
 
-        function renderPedidos() {
-            const contenedor = document.getElementById('lista-pedidos');
-            contenedor.innerHTML = pedidosGlobal.map(p => `
-                <div style="border-left:4px solid var(--primary); padding:10px; background:#f8f9fa; margin-bottom:8px; border-radius:4px;">
-                    <strong>${p.nombre}</strong> - ${p.contacto}<br>
-                    <small>Tag: ${p.tag}</small>
-                </div>
-            `).join('');
+        function seleccionarDelCatalogo(url) {
+            currentImgUrl = url;
+            ajustarImagen();
+            switchTab('view-render', document.querySelectorAll('.nav-tab')[0]);
         }
 
-        // --- UI UTILS ---
+        // --- PEDIDOS WHATSAPP & PERFIL ---
+        function pedirPorWhatsApp() {
+            const nombre = document.getElementById('nombre-diseno').value || "Sticker Personalizado";
+            const categoria = document.getElementById('categoria-input').value || "Geek";
+            const contacto = localStorage.getItem('user_contact') || "Cliente";
+
+            const mensaje = encodeURIComponent(`Hola! Me interesa encargar este diseño:\n📌 Nombre: ${nombre}\n🏷️ Categoría: ${categoria}\n👤 Cliente: ${contacto}\n🖼️ Link: ${currentImgUrl}`);
+            window.open(`https://wa.me/?text=${mensaje}`, '_blank');
+        }
+
+        function guardarPerfilLocal() {
+            const contacto = document.getElementById('perfil-contacto').value;
+            localStorage.setItem('user_contact', contacto);
+            mostrarToast("👤 Perfil guardado correctamente.");
+        }
+
+        function cargarPerfilGuardado() {
+            const contacto = localStorage.getItem('user_contact');
+            if (contacto) document.getElementById('perfil-contacto').value = contacto;
+        }
+
         function switchTab(viewId, btn) {
             document.querySelectorAll('.section-view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -374,14 +415,7 @@
             const toast = document.getElementById('toast');
             toast.innerText = msg;
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2000);
-        }
-
-        function limpiarFormulario() {
-            document.getElementById('nombre-diseno').value = '';
-            document.getElementById('contacto-cliente').value = '';
-            document.getElementById('url-input').value = '';
-            document.getElementById('file-input').value = '';
+            setTimeout(() => toast.classList.remove('show'), 2200);
         }
     </script>
 </body>
