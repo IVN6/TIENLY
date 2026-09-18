@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,820 +7,381 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Comic-Con Publicidad Hub - Naya</title>
-        <style>
+    <title>Sticker & Design Studio</title>
+    <style>
         :root {
             --primary: #6f42c1;
             --primary-light: #f3f0ff;
-            --success: #25D366;
-            --warning: #ffc107;
-            --danger: #dc3545;
             --dark: #1e1e24;
-            --bg-interno: #f1f3f5;
-            --border: #e9ecef;
-            --nav-height: 75px;
+            --bg-interno: #f8f9fa;
+            --border: #e2e8f0;
+            --nav-height: 70px;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg-interno); color: var(--dark); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-interno);
-            color: var(--dark);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            user-select: none;
-            -webkit-font-smoothing: antialiased;
-        }
+        /* --- APP CONTAINER & NAVIGATION --- */
+        .app-container { display: flex; flex: 1; height: calc(100vh - var(--nav-height)); overflow: hidden; position: relative; }
+        .section-view { display: none; flex-direction: column; width: 100%; height: 100%; padding: 20px; overflow: hidden; background: #fff; }
+        .section-view.active { display: flex; }
+        .scrollable-content { flex: 1; overflow-y: auto; padding-bottom: 80px; }
 
-        .mobile-nav {
-            display: flex;
-            background: white;
-            border-top: 1px solid rgba(0,0,0,0.05);
-            height: var(--nav-height);
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            z-index: 2000;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.04);
-        }
+        .mobile-nav { display: flex; background: white; border-top: 1px solid var(--border); height: var(--nav-height); position: fixed; bottom: 0; width: 100%; z-index: 2000; }
+        .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 600; color: #868e96; background: none; border: none; cursor: pointer; gap: 4px; }
+        .nav-tab.active { color: var(--primary); background: var(--primary-light); }
 
-        .nav-tab {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #868e96;
-            background: none;
-            border: none;
-            cursor: pointer;
-            gap: 6px;
-            transition: all 0.2s ease;
-        }
+        /* --- MOCKUP WORKSPACE --- */
+        .render-container { display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        .mockup-wrapper { width: 100%; max-width: 360px; height: 320px; display: flex; justify-content: center; align-items: center; background: #f1f3f5; border-radius: 16px; border: 2px dashed var(--border); position: relative; overflow: hidden; }
 
-        .nav-tab.active {
-            color: var(--primary);
-            background: var(--primary-light);
-        }
-
-        .app-container {
-            display: flex;
-            flex: 1;
-            height: calc(100vh - var(--nav-height));
-            overflow: hidden;
-            position: relative;
-        }
-
-        .section-view {
-            display: none;
-            flex-direction: column;
-            width: 100%;
-            height: 100%;
-            padding: 20px;
-            overflow: hidden;
-            background: #ffffff;
-        }
-
-        .section-view.active {
-            display: flex;
-        }
-
-        .scrollable-content {
-            flex: 1;
-            overflow-y: auto;
-            padding-bottom: 100px;
-        }
-
-        /* --- CONTENEDOR RENDERS / MOCKUPS --- */
-        .render-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 25px;
-            padding-top: 10px;
-        }
-
-        .mockup-wrapper {
-            width: 100%;
-            max-width: 340px;
-            height: 260px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #f8f9fa;
-            border-radius: 16px;
-            border: 2px dashed #e2e8f0;
-            position: relative;
-        }
-
-        /* --- MOCKUP BASE (TARJETA CRÉDITO) --- */
+        /* Tarjeta Base */
         .tarjeta-mockup {
-            width: 300px;
-            height: 188px;
+            width: 300px; height: 188px;
             border-radius: 12px;
-            background: linear-gradient(135deg, #1f1c2c 0%, #928dab 100%);
+            background-color: #2b2d42;
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
             position: relative;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.15);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+            transition: width 0.3s, height 0.3s, border-radius 0.3s;
             overflow: hidden;
         }
 
-        /* Reflejo elegante sobre la tarjeta */
-        .tarjeta-mockup::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 60%);
-            pointer-events: none;
-            z-index: 2;
-        }
+        /* Orientación Vertical */
+        .tarjeta-mockup.vertical { width: 188px; height: 300px; }
 
-        /* --- CHIP REALISTA CON CIRCUITOS --- */
+        /* Chip Interactivo */
         .tarjeta-mockup .chip {
-            width: 46px;
-            height: 35px;
-            background: linear-gradient(135deg, #ffd700 0%, #cca100 50%, #ffeb7a 100%);
-            border-radius: 6px;
-            position: absolute;
-            top: 45%;
-            left: 24px;
-            transform: translateY(-50%);
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(255,255,255,0.2);
-            z-index: 3;
-            border: 1px solid rgba(0,0,0,0.15);
+            width: 44px; height: 32px;
+            background: linear-gradient(135deg, #ffd700 0%, #cca100 100%);
+            border-radius: 5px; position: absolute; top: 45%; left: 20px;
+            transform: translateY(-50%); z-index: 3; border: 1px solid rgba(0,0,0,0.2);
+            display: block;
         }
+        .tarjeta-mockup.no-chip .chip { display: none !important; }
 
-        /* Líneas de circuito del chip */
-        .tarjeta-mockup .chip::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: 5px;
-            background: 
-                linear-gradient(90deg, transparent 46%, rgba(0,0,0,0.25) 47%, rgba(0,0,0,0.25) 53%, transparent 54%),
-                linear-gradient(0deg, transparent 46%, rgba(0,0,0,0.25) 47%, rgba(0,0,0,0.25) 53%, transparent 54%);
-        }
+        /* Modificadores Camiseta y Termo */
+        .tarjeta-mockup.tipo-Camiseta { width: 220px; height: 240px; border-radius: 10px 10px 40px 40px; background-color: #ffffff; border: 1px solid var(--border); }
+        .tarjeta-mockup.tipo-Camiseta .chip { display: none !important; }
+        .tarjeta-mockup.tipo-Termo { width: 130px; height: 250px; border-radius: 12px 12px 25px 25px; clip-path: polygon(5% 0%, 95% 0%, 85% 100%, 15% 100%); }
+        .tarjeta-mockup.tipo-Termo .chip { display: none !important; }
 
-        .tarjeta-mockup .chip::before {
-            content: '';
-            position: absolute;
-            top: 6px; left: 8px; right: 8px; bottom: 6px;
-            border: 1px solid rgba(0,0,0,0.15);
-            border-radius: 2px;
-        }
-
-        /* --- MODIFICADOR: CAMISETAS --- */
-        .tarjeta-mockup.tipo-Camiseta {
-            width: 200px;
-            height: 220px;
-            border-radius: 10px 10px 40px 40px;
-            background-color: #ffffff;
-            box-shadow: 0 12px 25px rgba(0,0,0,0.12);
-            border: 1px solid #e2e8f0;
-        }
-
-        /* Mangas de la camiseta */
-        .tarjeta-mockup.tipo-Camiseta::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -25px;
-            width: 250px; height: 70px;
-            background: inherit;
-            border-radius: 12px 12px 0 0;
-            z-index: -1;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        /* Cuello de la camiseta */
-        .tarjeta-mockup.tipo-Camiseta::after {
-            content: '';
-            position: absolute;
-            top: -1px; left: 50%;
-            transform: translateX(-50%);
-            width: 70px; height: 25px;
-            background: #f8f9fa;
-            border: 1px solid #e2e8f0;
-            border-radius: 0 0 40px 40px;
-            z-index: 2;
-        }
-
-        /* --- MODIFICADOR: TERMO / VASO --- */
-        .tarjeta-mockup.tipo-Termo {
-            width: 120px;
-            height: 230px;
-            border-radius: 12px 12px 30px 30px;
-            background-color: #2b2d42;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-            clip-path: polygon(5% 0%, 95% 0%, 85% 100%, 15% 100%); /* Efecto cónico de vaso/termo */
-        }
-
-        /* Tapa del termo */
-        .tarjeta-mockup.tipo-Termo::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 20px;
-            background: linear-gradient(90deg, #8d99ae, #edf2f4, #8d99ae);
-            border-bottom: 2px solid rgba(0,0,0,0.2);
-            z-index: 4;
-        }
-
-        .tipo-sticker {
-            position: absolute;
-            bottom: 12px;
-            right: 12px;
-            color: white;
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            background: rgba(0, 0, 0, 0.75);
-            padding: 5px 10px;
-            border-radius: 6px;
-            backdrop-filter: blur(4px);
-            z-index: 5;
-        }
-
-        /* --- FORMULARIOS --- */
-        .form-render {
-            width: 100%;
-            max-width: 340px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        input, select, textarea {
-            padding: 12px 14px;
-            border: 1px solid #ced4da;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            outline: none;
-            background: white;
-            width: 100%;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(111, 66, 193, 0.15);
-        }
-
-        .btn-action {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 15px;
-            font-size: 1rem;
-            font-weight: 700;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(111, 66, 193, 0.2);
-            transition: all 0.2s;
-        }
-
-        .btn-action:active {
-            transform: scale(0.98);
-        }
+        /* --- FORMULARIOS Y CONTROLES --- */
+        .form-controls { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 10px; }
+        .control-group { display: flex; gap: 8px; align-items: center; }
+        .control-group label { font-size: 0.8rem; font-weight: bold; width: 90px; color: #555; }
+        
+        input, select, textarea, button { padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none; width: 100%; }
+        input[type="range"] { padding: 0; }
+        
+        .btn-action { background: var(--primary); color: white; border: none; padding: 12px; font-weight: bold; cursor: pointer; border-radius: 8px; }
+        .btn-action:active { transform: scale(0.98); }
 
         /* --- CATÁLOGO --- */
-        .search-box { margin-bottom: 15px; }
-        
-        .tag-container {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .tag-badge {
-            background: #e9ecef;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            white-space: nowrap;
-            cursor: pointer;
-            font-weight: 600;
-            color: #495057;
-            transition: all 0.2s;
-        }
-        
-        .tag-badge.active {
-            background: var(--primary);
-            color: white;
-        }
+        .grid-catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+        .card-item { background: white; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; cursor: pointer; }
+        .card-img { width: 100%; height: 110px; background-size: cover; background-position: center; background-color: #eee; }
+        .card-info { padding: 8px; font-size: 0.8rem; }
 
-        .grid-catalogo {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
+        .tag-badge { background: #e9ecef; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; cursor: pointer; display: inline-block; margin-right: 4px; }
+        .tag-badge.active { background: var(--primary); color: white; }
 
-        .card-item {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-        }
+        #toast { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); background: var(--dark); color: white; padding: 10px 20px; border-radius: 20px; font-size: 0.85rem; opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 3000; }
+        #toast.show { opacity: 1; }
 
-        .card-img {
-            width: 100%;
-            height: 120px;
-            background-size: cover;
-            background-position: center;
-            background-color: #e9ecef;
-        }
-
-        .card-info {
-            padding: 10px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        /* --- MONITOR Y PROYECTOS --- */
-        .lead-ticket {
-            background: white;
-            padding: 15px;
-            border-left: 5px solid var(--primary);
-            border-radius: 8px;
-            margin-bottom: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-        }
-
-        .status-select {
-            margin-top: 10px;
-            padding: 6px;
-            font-size: 0.8rem;
-            width: auto;
-            border-radius: 6px;
-        }
-
-        .grid-necesidades {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 5px;
-        }
-
-        .btn-necesidad {
-            padding: 12px;
-            border: 1px solid #ced4da;
-            background: white;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-        }
-
-        .btn-necesidad.active {
-            background: var(--dark);
-            color: white;
-            border-color: var(--dark);
-        }
-
-        #toast-container {
-            position: fixed;
-            bottom: 95px;
-            left: 50%;
-            transform: translateX(-50%) translateY(10px);
-            background: rgba(30, 30, 36, 0.95);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            z-index: 5000;
-            opacity: 0;
-            transition: all 0.2s ease;
-            pointer-events: none;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-        
-        #toast-container.show { 
-            opacity: 1; 
-            transform: translateX(-50%) translateY(0); 
-        }
-
-        /* --- RESPONSIVE ESCRITORIO --- */
         @media (min-width: 768px) {
             .mobile-nav { display: none; }
-            .app-container {
-                display: grid;
-                grid-template-columns: 1fr 1fr 1fr 1fr;
-                height: 100vh;
-            }
-            .section-view {
-                display: flex !important;
-                border-right: 1px solid var(--border);
-                height: 100vh;
-            }
-            .section-view:last-child { border-right: none; }
-            .scrollable-content { padding-bottom: 30px; }
+            .app-container { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+            .section-view { display: flex !important; border-right: 1px solid var(--border); }
         }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        
+        <!-- VISTA MOCKUP -->
         <main id="view-render" class="section-view active">
-            <h3 style="margin-bottom: 12px;">🎨 Prueba tu Diseño</h3>
+            <h3 style="margin-bottom: 10px;">🎨 Personalizador de Sticker</h3>
             <div class="scrollable-content render-container">
+                
                 <div class="mockup-wrapper">
-                    <div class="tarjeta-mockup" id="tarjeta-preview">
-                        <div class="chip" id="tarjeta-chip"></div>
-                        <div class="tipo-sticker" id="tipo-badge">Tarjeta</div>
+                    <div class="tarjeta-mockup" id="sticker-preview">
+                        <div class="chip" id="card-chip"></div>
                     </div>
                 </div>
 
-                <div class="form-render">
-                    <select id="select-tipo" onchange="actualizarTipoMockup()">
-                        <option value="Tarjeta">💳 Sticker de Tarjeta</option>
-                        <option value="Camiseta">👕 Visualizar en Camiseta</option>
-                        <option value="Termo">🥤 Visualizar en Termo/Vaso</option>
-                    </select>
+                <div class="form-controls">
+                    <!-- Ajustes de plantilla -->
+                    <div class="control-group">
+                        <select id="select-tipo" onchange="actualizarPlantilla()">
+                            <option value="Tarjeta">💳 Tarjeta / Sticker</option>
+                            <option value="Camiseta">👕 Camiseta</option>
+                            <option value="Termo">🥤 Termo / Vaso</option>
+                        </select>
+                        <select id="select-orientacion" onchange="actualizarPlantilla()">
+                            <option value="horizontal">↔️ Horizontal</option>
+                            <option value="vertical">↕️ Vertical</option>
+                        </select>
+                    </div>
 
-                    <input type="text" id="url-imagen" placeholder="Pega el link de la imagen aquí..." oninput="renderizarImagenURL()">
-                    
-                    <label style="font-size:0.8rem; font-weight:bold; color:#555; margin-top:5px;">O sube foto de tu celular:</label>
-                    <input type="file" id="file-imagen" accept="image/*" onchange="renderizarImagenLocal(event)">
+                    <!-- Toggle del Chip -->
+                    <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600;">
+                        <input type="checkbox" id="check-chip" checked onchange="actualizarPlantilla()" style="width: auto;">
+                        <label for="check-chip">Mostrar Chip de Tarjeta</label>
+                    </div>
 
-                    <input type="text" id="nombre-sticker" placeholder="Nombre del diseño (Ej: Naruto Modo Sabio)">
-                    
-                    <input type="text" id="tag-sticker" placeholder="Etiqueta / Categoría (Ej: Anime, Geek)">
+                    <!-- Ajustes de Imagen (Zoom & Posición) -->
+                    <div class="control-group">
+                        <label>Zoom</label>
+                        <input type="range" id="zoom-img" min="50" max="250" value="100" oninput="aplicarEstilosImagen()">
+                    </div>
+                    <div class="control-group">
+                        <label>Posición X</label>
+                        <input type="range" id="pos-x" min="0" max="100" value="50" oninput="aplicarEstilosImagen()">
+                    </div>
+                    <div class="control-group">
+                        <label>Posición Y</label>
+                        <input type="range" id="pos-y" min="0" max="100" value="50" oninput="aplicarEstilosImagen()">
+                    </div>
 
-                    <input type="text" id="cliente-whatsapp-sticker" placeholder="Tu WhatsApp o Instagram">
-                    
-                    <button class="btn-action" onclick="guardarDisenoYPedido()">Encargar / Subir al catálogo</button>
+                    <!-- Entradas de datos -->
+                    <input type="file" id="file-input" accept="image/*" onchange="cargarImagenLocal(event)">
+                    <input type="text" id="url-input" placeholder="O pega el link de la imagen..." oninput="cargarImagenURL()">
+                    <input type="text" id="nombre-diseno" placeholder="Nombre del diseño (Ej: Cyberpunk)">
+                    <input type="text" id="tag-diseno" placeholder="Categoría / Tag (Ej: Anime)">
+                    <input type="text" id="contacto-cliente" placeholder="Tu WhatsApp o Instagram">
+
+                    <button class="btn-action" onclick="guardarDiseno()">Publicar / Encargar</button>
                 </div>
             </div>
         </main>
 
+        <!-- VISTA CATÁLOGO -->
         <section id="view-catalogo" class="section-view">
-            <h3 style="margin-bottom: 12px;">🛍️ Catálogo de Diseños</h3>
-            <div class="search-box">
-                <input type="text" id="input-buscar" placeholder="🔍 Buscar por nombre o tag..." oninput="filtrarCatalogo()">
-            </div>
-            <div class="tag-container" id="lista-tags"></div>
+            <h3 style="margin-bottom: 10px;">🛍️ Catálogo</h3>
+            <input type="text" id="buscar-catalogo" placeholder="🔍 Buscar..." oninput="renderCatalogo()" style="margin-bottom: 10px;">
+            <div id="tags-container" style="margin-bottom: 10px; overflow-x: auto; white-space: nowrap;"></div>
             <div class="scrollable-content">
                 <div class="grid-catalogo" id="contenedor-catalogo"></div>
             </div>
         </section>
 
-        <aside id="view-proyecto" class="section-view">
-            <h3 style="margin-bottom: 12px;">🏢 Proyectos y Fachadas</h3>
-            <div class="scrollable-content">
-                <div style="display:flex; flex-direction:column; gap:12px;">
-                    <input type="text" id="proyecto-contacto" placeholder="Tu Nombre / Marca o Canal">
-                    <input type="text" id="proyecto-redes" placeholder="WhatsApp o Instagram corporativo">
-                    
-                    <p style="font-size:0.85rem; font-weight:bold; color:#555;">¿Qué tipo de soporte comercial buscas?</p>
-                    <div class="grid-necesidades">
-                        <button class="btn-necesidad" onclick="toggleNecesidad(this, 'Letrero Local')">Letrero Exterior</button>
-                        <button class="btn-necesidad" onclick="toggleNecesidad(this, 'Camisas')">Uniformes/Ropa</button>
-                        <button class="btn-necesidad" onclick="toggleNecesidad(this, 'Termos')">Vasos/Termos</button>
-                        <button class="btn-necesidad" onclick="toggleNecesidad(this, 'Por Mayor')">Stickers x Mayor</button>
-                    </div>
-
-                    <textarea id="proyecto-notas" placeholder="Cuéntanos brevemente tu idea..."></textarea>
-                    <button class="btn-action" style="background:var(--dark);" onclick="guardarPedidoProyecto()">Registrar Petición (Respuesta Martes)</button>
-                </div>
-            </div>
+        <!-- VISTA MONITOR / BACKEND -->
+        <aside id="view-monitor" class="section-view">
+            <h3>🖥️ Pedidos Recibidos</h3>
+            <div class="scrollable-content" id="lista-pedidos" style="margin-top: 10px;"></div>
         </aside>
-
-        <section id="view-monitor" class="section-view">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                <h3>🖥️ Monitor Backstage</h3>
-                <button onclick="fetchBaseDatos()" style="padding:6px 12px; background:var(--primary); color:white; border:none; border-radius:4px; font-weight:bold; cursor:pointer;">🔄 Actualizar</button>
-            </div>
-            <div class="scrollable-content" id="lista-leads"></div>
-        </section>
-
     </div>
 
+    <!-- Navegación Móvil -->
     <nav class="mobile-nav">
-        <button class="nav-tab active" id="btn-tab-render" onclick="switchView('view-render', this)"><span>🎨</span>Prueba</button>
-        <button class="nav-tab" id="btn-tab-catalogo" onclick="switchView('view-catalogo', this)"><span>🛍️</span>Catálogo</button>
-        <button class="nav-tab" id="btn-tab-proyecto" onclick="switchView('view-proyecto', this)"><span>🏢</span>Proyectos</button>
-        <button class="nav-tab" id="btn-tab-monitor" onclick="validarAccesoMonitor(this)"><span>🖥️</span>Monitor</button>
+        <button class="nav-tab active" onclick="switchTab('view-render', this)">🎨 Editor</button>
+        <button class="nav-tab" onclick="switchTab('view-catalogo', this)">🛍️ Catálogo</button>
+        <button class="nav-tab" onclick="switchTab('view-monitor', this)">🖥️ Pedidos</button>
     </nav>
 
-    <div id="toast-container"></div>
+    <div id="toast"></div>
 
-   <script>
-        // Configuración JSONBin dada por el usuario
-        const BIN_ID = "6a404598da38895dfe08fd8b";
-        const API_KEY = "$2a$10$edUNjadfgiG/n42CVVtAXuvMtcvA03U5bi2mel4FIh5Jmx9mL/thW";
-        
-        let dbLeads = [];
-        let catalogoComunitario = [];
-        let misFotosLocales = JSON.parse(localStorage.getItem('misFotosLocales')) || [];
-        let necesidadesSeleccionadas = [];
-        let tagSeleccionado = "Todos";
+    <script>
+        // CONFIGURACIÓN BACKEND (Coloca la URL desplegada de Google Apps Script)
+        const GAS_URL = ""; 
 
-        // Carga inicial al abrir la app
+        // ESTADO GLOBAL
+        let currentImageSrc = "";
+        let db;
+        let catalogoGlobal = [];
+        let pedidosGlobal = [];
+        let tagActivo = "Todos";
+
+        // INICIALIZACIÓN INDEXEDDB (Para guardar localmente sin límites de memory/localStorage)
+        const request = indexedDB.open("StickerStudioDB", 1);
+        request.onupgradeneeded = (e) => {
+            db = e.target.result;
+            db.createObjectStore("misDisenos", { keyPath: "id", autoIncrement: true });
+        };
+        request.onsuccess = (e) => {
+            db = e.target.result;
+            cargarDisenosLocales();
+        };
+
         window.addEventListener('DOMContentLoaded', () => {
-            fetchBaseDatos();
+            sincronizarConBackend();
         });
 
-        async function fetchBaseDatos() {
-            try {
-                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-                    headers: { "X-Master-Key": API_KEY }
-                });
-                const data = await res.json();
-                // Si el formato del bin contiene estructura limpia, mapeamos de lo contrario inicializamos
-                dbLeads = data.record.leads || [];
-                catalogoComunitario = data.record.catalogo || [];
-                renderMonitor();
-                renderCatalogo();
-            } catch (e) {
-                showToast("⚠️ Error conectando al servidor remoto.");
-            }
-        }
-
-        async function actualizarBaseDatos() {
-            try {
-                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-                    method: 'PUT',
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-Master-Key": API_KEY
-                    },
-                    body: JSON.stringify({ leads: dbLeads, catalogo: catalogoComunitario })
-                });
-            } catch (e) {
-                showToast("⚠️ No se pudo guardar en la nube.");
-            }
-        }
-
-        function switchView(viewId, button) {
-            if (window.innerWidth < 768) {
-                document.querySelectorAll('.section-view').forEach(v => v.classList.remove('active'));
-                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-                document.getElementById(viewId).classList.add('active');
-                button.classList.add('active');
-            }
-        }
-
-        function validarAccesoMonitor(btn) {
-            const pass = prompt("Introduce la clave de acceso del administrador:");
-            if (pass === "1234") {
-                switchView('view-monitor', btn);
-                fetchBaseDatos();
-            } else {
-                alert("❌ Clave incorrecta.");
-            }
-        }
-
-        function showToast(mensaje) {
-            const toast = document.getElementById('toast-container');
-            toast.innerText = mensaje;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2300);
-        }
-
-        // --- MANEJO DE MOCKUPS ---
-        function actualizarTipoMockup() {
+        // --- MANEJO DE MOCKUP Y STYLES ---
+        function actualizarPlantilla() {
+            const preview = document.getElementById('sticker-preview');
             const tipo = document.getElementById('select-tipo').value;
-            const preview = document.getElementById('tarjeta-preview');
-            const chip = document.getElementById('tarjeta-chip');
-            document.getElementById('tipo-badge').innerText = tipo;
-            
-            preview.className = `tarjeta-mockup tipo-${tipo}`;
-            chip.style.display = (tipo === "Tarjeta") ? "block" : "none";
+            const orientacion = document.getElementById('select-orientacion').value;
+            const tieneChip = document.getElementById('check-chip').checked;
+
+            preview.className = `tarjeta-mockup tipo-${tipo} ${orientacion}`;
+            if (!tieneChip) preview.classList.add('no-chip');
+            else preview.classList.remove('no-chip');
         }
 
-        function renderizarImagenURL() {
-            const url = document.getElementById('url-imagen').value;
-            if (url.trim()) {
-                document.getElementById('tarjeta-preview').style.backgroundImage = `url('${url}')`;
-                document.getElementById('file-imagen').value = ""; // Resetea el local
+        function aplicarEstilosImagen() {
+            const preview = document.getElementById('sticker-preview');
+            const zoom = document.getElementById('zoom-img').value;
+            const posX = document.getElementById('pos-x').value;
+            const posY = document.getElementById('pos-y').value;
+
+            preview.style.backgroundImage = `url('${currentImageSrc}')`;
+            preview.style.backgroundSize = `${zoom}%`;
+            preview.style.backgroundPosition = `${posX}% ${posY}%`;
+        }
+
+        function cargarImagenLocal(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Genera URL temporal en memoria RAM (Zero consumo de almacenamiento)
+                currentImageSrc = URL.createObjectURL(file);
+                aplicarEstilosImagen();
             }
         }
 
-        function renderizarImagenLocal(event) {
-            const reader = new FileReader();
-            reader.onload = function() {
-                document.getElementById('tarjeta-preview').style.backgroundImage = `url('${reader.result}')`;
-                document.getElementById('url-imagen').value = ""; // Resetea el URL público
-            };
-            if(event.target.files[0]) reader.readAsDataURL(event.target.files[0]);
+        function cargarImagenURL() {
+            const url = document.getElementById('url-input').value.trim();
+            if (url) {
+                currentImageSrc = url;
+                aplicarEstilosImagen();
+            }
         }
 
-        function aplicarDisenoCatalogo(url) {
-            document.getElementById('url-imagen').value = url;
-            document.getElementById('tarjeta-preview').style.backgroundImage = `url('${url}')`;
-            if (window.innerWidth < 768) switchView('view-render', document.getElementById('btn-tab-render'));
-        }
-
-        // --- GUARDADO DE DATOS ---
-        async function guardarDisenoYPedido() {
-            const tipo = document.getElementById('select-tipo').value;
-            const url = document.getElementById('url-imagen').value.trim();
-            const fileInput = document.getElementById('file-imagen');
-            const nombre = document.getElementById('nombre-sticker').value.trim() || "Diseño sin nombre";
-            const tag = document.getElementById('tag-sticker').value.trim() || "Geek";
-            const contacto = document.getElementById('cliente-whatsapp-sticker').value.trim();
+        // --- GUARDADO Y PROCESAMIENTO ---
+        async function guardarDiseno() {
+            const nombre = document.getElementById('nombre-diseno').value.trim() || "Sin Nombre";
+            const tag = document.getElementById('tag-diseno').value.trim() || "General";
+            const contacto = document.getElementById('contacto-cliente').value.trim();
 
             if (!contacto) {
-                showToast("⚠️ Deja tu contacto para confirmar el diseño.");
+                mostrarToast("⚠️ Añade tu contacto para procesar.");
                 return;
             }
 
-            let finalImgSrc = url;
+            const nuevoItem = { nombre, tag, contacto, url: currentImageSrc, fecha: new Date().toISOString() };
 
-            // Es una imagen del celular local
-            if (fileInput.files.length > 0) {
-                const reader = new FileReader();
-                reader.readAsDataURL(fileInput.files[0]);
-                reader.onload = function () {
-                    const localData = { id: Date.now(), nombre: nombre, url: reader.result, tag: 'Mis Fotos' };
-                    misFotosLocales.unshift(localData);
-                    localStorage.setItem('misFotosLocales', JSON.stringify(misFotosLocales));
-                    registrarTicketInterno(tipo, "Archivo Local (Mis Fotos)", contacto);
-                };
-                return;
+            // 1. Guardado local en IndexedDB
+            const tx = db.transaction(["misDisenos"], "readwrite");
+            tx.objectStore("misDisenos").add(nuevoItem);
+
+            // 2. Enviar a Google Apps Script si está configurado
+            if (GAS_URL) {
+                try {
+                    await fetch(GAS_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(nuevoItem)
+                    });
+                } catch (e) { console.error(e); }
             }
 
-            // Si es un link URL, alimenta el catálogo global en JSONBin
-            if (url) {
-                const existe = catalogoComunitario.some(item => item.url === url);
-                if (!existe) {
-                    catalogoComunitario.unshift({ id: Date.now(), nombre: nombre, url: url, tag: tag });
+            mostrarToast("🚀 ¡Diseño registrado!");
+            cargarDisenosLocales();
+            limpiarFormulario();
+        }
+
+        function cargarDisenosLocales() {
+            if (!db) return;
+            const tx = db.transaction(["misDisenos"], "readonly");
+            const store = tx.objectStore("misDisenos");
+            const req = store.getAll();
+            req.onsuccess = () => {
+                catalogoGlobal = req.result;
+                renderCatalogo();
+            };
+        }
+
+        async function sincronizarConBackend() {
+            if (!GAS_URL) return;
+            try {
+                const res = await fetch(GAS_URL);
+                const data = await res.json();
+                if (data.catalogo) {
+                    catalogoGlobal = [...catalogoGlobal, ...data.catalogo];
+                    renderCatalogo();
                 }
-            }
-
-            registrarTicketInterno(tipo, url || "Ninguno", contacto);
-        }
-
-        async function registrarTicketInterno(tipo, imgUrl, contacto) {
-            const nuevoLead = {
-                id: Date.now(),
-                fechaAbierto: new Date().toISOString(),
-                categoria: 'Sticker Personalizado',
-                detalle: `Tipo: ${tipo} | Img: ${imgUrl}`,
-                contacto: contacto,
-                estado: 'Pendiente',
-                notas: 'Esperando confirmación el martes.'
-            };
-
-            dbLeads.unshift(nuevoLead);
-            showToast("🚀 ¡Diseño procesado! Revisa el catálogo o espera respuesta.");
-            
-            // Limpieza
-            document.getElementById('url-imagen').value = "";
-            document.getElementById('file-imagen').value = "";
-            document.getElementById('nombre-sticker').value = "";
-            document.getElementById('cliente-whatsapp-sticker').value = "";
-            document.getElementById('tarjeta-preview').style.backgroundImage = "none";
-
-            await actualizarBaseDatos();
-            renderCatalogo();
-            renderMonitor();
-        }
-
-        function toggleNecesidad(btn, valor) {
-            btn.classList.toggle('active');
-            if (btn.classList.contains('active')) {
-                necesidadesSeleccionadas.push(valor);
-            } else {
-                necesidadesSeleccionadas = necesidadesSeleccionadas.filter(n => n !== valor);
+                if (data.pedidos) {
+                    pedidosGlobal = data.pedidos;
+                    renderPedidos();
+                }
+            } catch (e) {
+                console.log("Servidor backend no disponible.");
             }
         }
 
-        async function guardarPedidoProyecto() {
-            const marca = document.getElementById('proyecto-contacto').value;
-            const redes = document.getElementById('proyecto-redes').value;
-            const notas = document.getElementById('proyecto-notas').value;
-
-            if (!marca || !redes) {
-                showToast("⚠️ Rellena tu marca/nombre y contacto.");
-                return;
-            }
-
-            const nuevoLead = {
-                id: Date.now(),
-                fechaAbierto: new Date().toISOString(),
-                categoria: 'Proyecto Publicitario',
-                detalle: necesidadesSeleccionadas.length > 0 ? necesidadesSeleccionadas.join(', ') : 'Soporte General',
-                contacto: `${marca} (${redes})`,
-                estado: 'Pendiente',
-                notas: notas || 'Sin especificaciones breves.'
-            };
-
-            dbLeads.unshift(nuevoLead);
-            document.getElementById('proyecto-contacto').value = '';
-            document.getElementById('proyecto-redes').value = '';
-            document.getElementById('proyecto-notas').value = '';
-            document.querySelectorAll('.btn-necesidad').forEach(b => b.classList.remove('active'));
-            necesidadesSeleccionadas = [];
-
-            showToast("✅ Requerimiento guardado para el Martes.");
-            await actualizarBaseDatos();
-            renderMonitor();
-        }
-
-        // --- RENDERIZACIÓN DE VISTAS ---
+        // --- RENDERIZADO DE VISTAS ---
         function renderCatalogo() {
             const contenedor = document.getElementById('contenedor-catalogo');
-            const contenedorTags = document.getElementById('lista-tags');
-            
-            // Unir catálogo en la nube + fotos locales del celular actual
-            const todoElCatalogo = [...misFotosLocales, ...catalogoComunitario];
+            const busqueda = document.getElementById('buscar-catalogo').value.toLowerCase();
 
-            // Extraer Tags Únicos
-            const tags = ['Todos', ...new Set(todoElCatalogo.map(i => i.tag))];
-            contenedorTags.innerHTML = tags.map(t => `
-                <span class="tag-badge ${tagSeleccionado === t ? 'active' : ''}" onclick="filtrarPorTag('${t}')">${t}</span>
+            // Tags
+            const tags = ['Todos', ...new Set(catalogoGlobal.map(i => i.tag))];
+            document.getElementById('tags-container').innerHTML = tags.map(t => `
+                <span class="tag-badge ${tagActivo === t ? 'active' : ''}" onclick="filtrarTag('${t}')">${t}</span>
             `).join('');
 
-            // Filtrado
-            const buscador = document.getElementById('input-buscar').value.toLowerCase();
-            const filtrados = todoElCatalogo.filter(item => {
-                const cumpleTag = (tagSeleccionado === "Todos" || item.tag === tagSeleccionado);
-                const cumpleTexto = item.nombre.toLowerCase().includes(buscador) || item.tag.toLowerCase().includes(buscador);
-                return cumpleTag && cumpleTexto;
+            const filtrados = catalogoGlobal.filter(i => {
+                const matchTag = tagActivo === 'Todos' || i.tag === tagActivo;
+                const matchTxt = i.nombre.toLowerCase().includes(busqueda) || i.tag.toLowerCase().includes(busqueda);
+                return matchTag && matchTxt;
             });
 
-            if(filtrados.length === 0) {
-                contenedor.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:20px; color:#aaa;">No se encontraron diseños.</div>`;
-                return;
-            }
-
             contenedor.innerHTML = filtrados.map(item => `
-                <div class="card-item" onclick="aplicarDisenoCatalogo('${item.url}')">
+                <div class="card-item" onclick="seleccionarDelCatalogo('${item.url}')">
                     <div class="card-img" style="background-image: url('${item.url}')"></div>
                     <div class="card-info">
                         <strong>${item.nombre}</strong><br>
-                        <span style="color:var(--primary); font-size:0.7rem;">🏷️ ${item.tag}</span>
+                        <span style="color:var(--primary)">🏷️ ${item.tag}</span>
                     </div>
                 </div>
             `).join('');
         }
 
-        function filtrarPorTag(tag) {
-            tagSeleccionado = tag;
+        function seleccionarDelCatalogo(url) {
+            currentImageSrc = url;
+            aplicarEstilosImagen();
+            switchTab('view-render', document.querySelectorAll('.nav-tab')[0]);
+        }
+
+        function filtrarTag(tag) {
+            tagActivo = tag;
             renderCatalogo();
         }
 
-        function filtrarCatalogo() {
-            renderCatalogo();
+        function renderPedidos() {
+            const contenedor = document.getElementById('lista-pedidos');
+            contenedor.innerHTML = pedidosGlobal.map(p => `
+                <div style="border-left:4px solid var(--primary); padding:10px; background:#f8f9fa; margin-bottom:8px; border-radius:4px;">
+                    <strong>${p.nombre}</strong> - ${p.contacto}<br>
+                    <small>Tag: ${p.tag}</small>
+                </div>
+            `).join('');
         }
 
-        function cambiarEstadoTicket(id, nuevoEstado) {
-            const ticket = dbLeads.find(l => l.id === id);
-            if (ticket) {
-                ticket.estado = nuevoEstado;
-                actualizarBaseDatos();
-            }
+        // --- UI UTILS ---
+        function switchTab(viewId, btn) {
+            document.querySelectorAll('.section-view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            if (btn) btn.classList.add('active');
         }
 
-        function renderMonitor() {
-            const contenedor = document.getElementById('lista-leads');
-            if (dbLeads.length === 0) {
-                contenedor.innerHTML = `<div style="color:#aaa; text-align:center; padding:35px;">No hay registros captados aún.</div>`;
-                return;
-            }
+        function mostrarToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
 
-            contenedor.innerHTML = dbLeads.map(l => {
-                const fecha = l.fechaAbierto ? new Date(l.fechaAbierto).toLocaleTimeString() : new Date(l.id).toLocaleTimeString();
-                return `
-                    <div class="lead-ticket" style="border-left-color: ${l.estado === 'Completado' ? 'var(--success)' : l.estado === 'En Proceso' ? 'var(--warning)' : 'var(--danger)'}">
-                        <div style="font-size:0.8rem; display:flex; justify-content:space-between; font-weight:bold;">
-                            <span>📌 ${l.categoria}</span>
-                            <span style="color:#6c757d;">⏱️ ${fecha}</span>
-                        </div>
-                        <div style="font-size:0.9rem; font-weight:bold; margin:4px 0;">Contacto: ${l.contacto}</div>
-                        <div style="font-size:0.8rem; color:#495057;">Detalle: ${l.detalle}</div>
-                        <div style="font-size:0.75rem; background:#f1f3f5; padding:4px; margin-top:5px; border-radius:4px;">
-                            <strong>Nota:</strong> ${l.notas}
-                        </div>
-                        <select class="status-select" onchange="cambiarEstadoTicket(${l.id}, this.value)">
-                            <option value="Pendiente" ${l.estado === 'Pendiente' ? 'selected' : ''}>🔴 Pendiente</option>
-                            <option value="En Proceso" ${l.estado === 'En Proceso' ? 'selected' : ''}>🟡 En Proceso</option>
-                            <option value="Completado" ${l.estado === 'Completado' ? 'selected' : ''}>🟢 Completado</option>
-                        </select>
-                    </div>
-                `;
-            }).join('');
+        function limpiarFormulario() {
+            document.getElementById('nombre-diseno').value = '';
+            document.getElementById('contacto-cliente').value = '';
+            document.getElementById('url-input').value = '';
+            document.getElementById('file-input').value = '';
         }
     </script>
 </body>
