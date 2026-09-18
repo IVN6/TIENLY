@@ -6,121 +6,122 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sticker & Design Studio - Naya</title>
+    <title>Sticker Studio - Naya</title>
     <style>
         :root {
             --primary: #6f42c1;
             --primary-light: #f3f0ff;
             --success: #25D366;
             --dark: #1e1e24;
-            --bg-interno: #f1f3f5;
-            --border: #e9ecef;
-            --nav-height: 70px;
+            --bg-interno: #f8f9fa;
+            --border: #e2e8f0;
+            --nav-height: 65px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
             background: var(--bg-interno);
             color: var(--dark);
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            user-select: none;
         }
 
-        /* --- APP STRUCTURE --- */
         .app-container { display: flex; flex: 1; height: calc(100vh - var(--nav-height)); overflow: hidden; position: relative; }
-        .section-view { display: none; flex-direction: column; width: 100%; height: 100%; padding: 18px; overflow: hidden; background: #ffffff; }
+        .section-view { display: none; flex-direction: column; width: 100%; height: 100%; padding: 15px; overflow: hidden; background: #ffffff; }
         .section-view.active { display: flex; }
-        .scrollable-content { flex: 1; overflow-y: auto; padding-bottom: 90px; }
+        .scrollable-content { flex: 1; overflow-y: auto; padding-bottom: 30px; -webkit-overflow-scrolling: touch; }
 
-        .mobile-nav { display: flex; background: white; border-top: 1px solid var(--border); height: var(--nav-height); position: fixed; bottom: 0; width: 100%; z-index: 2000; box-shadow: 0 -4px 20px rgba(0,0,0,0.04); }
-        .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 600; color: #868e96; background: none; border: none; cursor: pointer; gap: 4px; }
+        .mobile-nav { display: flex; background: white; border-top: 1px solid var(--border); height: var(--nav-height); position: fixed; bottom: 0; width: 100%; z-index: 2000; }
+        .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 600; color: #868e96; background: none; border: none; cursor: pointer; gap: 3px; }
         .nav-tab.active { color: var(--primary); background: var(--primary-light); }
 
-        /* --- MOCKUP WORKSPACE --- */
-        .render-container { display: flex; flex-direction: column; align-items: center; gap: 15px; }
+        /* --- MOCKUP FIX (ALTO FIJO Y FLEX-SHRINK: 0) --- */
+        .render-container { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; }
+        
         .mockup-wrapper {
-            width: 100%; max-width: 350px; height: 320px;
-            display: flex; justify-content: center; align-items: center;
-            background: #f8f9fa; border-radius: 16px; border: 2px dashed #cbd5e1;
-            position: relative; overflow: hidden;
+            width: 100%;
+            max-width: 340px;
+            min-height: 240px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f1f5f9;
+            border-radius: 16px;
+            border: 2px dashed #cbd5e1;
+            position: relative;
+            flex-shrink: 0; /* Previene colapso en pantallas móviles */
+            padding: 15px;
+            margin-bottom: 5px;
         }
 
-        /* Tarjeta de Crédito (Estilo Elegante Original) */
+        /* Tarjeta de Crédito Elegante */
         .tarjeta-mockup {
-            width: 300px; height: 188px;
+            width: 280px;
+            height: 175px;
             border-radius: 12px;
             background: linear-gradient(135deg, #1f1c2c 0%, #928dab 100%);
-            background-size: cover; background-position: center;
+            background-size: cover;
+            background-position: center;
             position: relative;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.15);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
             overflow: hidden;
         }
-        .tarjeta-mockup.vertical { width: 188px; height: 300px; }
 
-        .tarjeta-mockup::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 60%);
-            pointer-events: none; z-index: 2;
+        .tarjeta-mockup.vertical {
+            width: 175px;
+            height: 280px;
         }
 
-        /* Chip Realista con Circuitos */
+        /* Chip con Microcircuitos */
         .tarjeta-mockup .chip {
-            width: 44px; height: 34px;
-            background: linear-gradient(135deg, #ffd700 0%, #cca100 50%, #ffeb7a 100%);
-            border-radius: 6px; position: absolute; top: 45%; left: 22px;
+            width: 42px; height: 32px;
+            background: linear-gradient(135deg, #ffd700 0%, #cca100 100%);
+            border-radius: 5px; position: absolute; top: 45%; left: 18px;
             transform: translateY(-50%); z-index: 3;
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.3); border: 1px solid rgba(0,0,0,0.15);
-        }
-        .tarjeta-mockup .chip::after {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: 
-                linear-gradient(90deg, transparent 46%, rgba(0,0,0,0.25) 47%, rgba(0,0,0,0.25) 53%, transparent 54%),
-                linear-gradient(0deg, transparent 46%, rgba(0,0,0,0.25) 47%, rgba(0,0,0,0.25) 53%, transparent 54%);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.4);
+            border: 1px solid rgba(0,0,0,0.2);
         }
 
-        /* --- MOCKUP CAMISETA (Imagen Real) --- */
+        /* Camiseta con Área de Estampado */
         .mockup-camiseta {
-            width: 280px; height: 300px;
-            background-image: url('https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=600&auto=format&fit=crop');
+            width: 240px; height: 260px;
+            background-image: url('https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=500&auto=format&fit=crop');
             background-size: cover; background-position: center;
             border-radius: 12px; display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            flex-shrink: 0;
         }
         .area-impresion {
-            width: 110px; height: 140px;
-            border: 2px dashed rgba(111, 66, 193, 0.7);
+            width: 100px; height: 130px;
+            border: 2px dashed var(--primary);
             background-size: cover; background-position: center;
-            border-radius: 6px; transform: translateY(-10px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-radius: 4px; transform: translateY(-8px);
         }
 
-        /* --- CONTROLES Y FORMULARIOS --- */
-        .form-controls { width: 100%; max-width: 350px; display: flex; flex-direction: column; gap: 10px; }
+        /* --- CONTROLES Y FORMULARIO --- */
+        .form-controls { width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 10px; }
         .row-group { display: flex; gap: 8px; align-items: center; }
-        .row-group label { font-size: 0.8rem; font-weight: bold; width: 80px; color: #555; }
+        .row-group label { font-size: 0.78rem; font-weight: bold; width: 75px; color: #555; }
 
-        input, select, button { padding: 10px 12px; border: 1px solid #ced4da; border-radius: 8px; font-size: 0.9rem; outline: none; width: 100%; }
-        input:focus, select:focus { border-color: var(--primary); }
-
-        .btn-action { background: var(--primary); color: white; border: none; padding: 12px; font-weight: 700; border-radius: 8px; cursor: pointer; }
-        .btn-whatsapp { background: var(--success); color: white; border: none; padding: 12px; font-weight: 700; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        input, select, button { padding: 9px 12px; border: 1px solid #ced4da; border-radius: 8px; font-size: 0.88rem; outline: none; width: 100%; }
+        .btn-action { background: var(--primary); color: white; border: none; padding: 11px; font-weight: 700; border-radius: 8px; cursor: pointer; }
+        .btn-whatsapp { background: var(--success); color: white; border: none; padding: 11px; font-weight: 700; border-radius: 8px; cursor: pointer; }
 
         /* --- CATÁLOGO --- */
         .grid-catalogo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .card-item { background: white; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.03); }
-        .card-img { width: 100%; height: 110px; background-size: cover; background-position: center; background-color: #e9ecef; }
-        .card-info { padding: 8px; font-size: 0.8rem; }
+        .card-item { background: white; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; cursor: pointer; }
+        .card-img { width: 100%; height: 105px; background-size: cover; background-position: center; background-color: #eee; }
+        .card-info { padding: 6px 8px; font-size: 0.78rem; }
 
-        .tag-badge { background: #e9ecef; padding: 5px 12px; border-radius: 15px; font-size: 0.75rem; font-weight: 600; cursor: pointer; display: inline-block; white-space: nowrap; margin-right: 5px; }
+        .tag-badge { background: #e9ecef; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; cursor: pointer; display: inline-block; margin-right: 4px; white-space: nowrap; }
         .tag-badge.active { background: var(--primary); color: white; }
 
-        #toast { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); background: var(--dark); color: white; padding: 10px 20px; border-radius: 20px; font-size: 0.85rem; opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 3000; }
+        #toast { position: fixed; bottom: 75px; left: 50%; transform: translateX(-50%); background: var(--dark); color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 3000; }
         #toast.show { opacity: 1; }
 
         @media (min-width: 768px) {
@@ -135,7 +136,7 @@
     <div class="app-container">
         <!-- VISTA MOCKUP -->
         <main id="view-render" class="section-view active">
-            <h3 style="margin-bottom: 10px;">🎨 Personalizador de Sticker</h3>
+            <h3 style="margin-bottom: 8px;">🎨 Personalizador de Sticker</h3>
             <div class="scrollable-content render-container">
                 
                 <div class="mockup-wrapper" id="contenedor-mockup">
@@ -147,8 +148,8 @@
                 <div class="form-controls">
                     <div class="row-group">
                         <select id="select-soporte" onchange="cambiarSoporte()">
-                            <option value="tarjeta">💳 Sticker para Tarjeta</option>
-                            <option value="camiseta">👕 Visualizar en Camiseta</option>
+                            <option value="tarjeta">💳 Sticker Tarjeta</option>
+                            <option value="camiseta">👕 Camiseta</option>
                         </select>
                         <select id="select-orientacion" onchange="cambiarOrientacion()">
                             <option value="horizontal">↔️ Horizontal</option>
@@ -158,10 +159,9 @@
 
                     <div style="display:flex; align-items:center; gap:8px; font-size:0.8rem; font-weight:bold;">
                         <input type="checkbox" id="check-chip" checked onchange="toggleChip()" style="width:auto;">
-                        <label for="check-chip">Mostrar Chip de Tarjeta</label>
+                        <label for="check-chip">Mostrar Chip</label>
                     </div>
 
-                    <!-- Zoom y Ajuste de Fondo -->
                     <div class="row-group">
                         <label>Zoom</label>
                         <input type="range" id="slider-zoom" min="50" max="250" value="100" oninput="ajustarImagen()">
@@ -175,17 +175,14 @@
                         <input type="range" id="slider-pos-y" min="0" max="100" value="50" oninput="ajustarImagen()">
                     </div>
 
-                    <!-- Carga de Imagen y Categorías -->
                     <input type="file" id="file-input" accept="image/*" onchange="cargarFotoLocal(event)">
                     <input type="text" id="url-input" placeholder="O pega el link de la imagen..." oninput="cargarFotoURL()">
+                    <input type="text" id="nombre-diseno" placeholder="Nombre del diseño (Ej: Naruto)">
                     
-                    <input type="text" id="nombre-diseno" placeholder="Nombre del diseño (Ej: Naruto Modo Sabio)">
-                    
-                    <!-- Categoria dinámica con autocompletado y ranking -->
-                    <input type="text" id="categoria-input" list="lista-categorias-dinamica" placeholder="Escribe o elige una categoría (Ej: Anime)">
+                    <input type="text" id="categoria-input" list="lista-categorias-dinamica" placeholder="Categoría (Ej: Anime)">
                     <datalist id="lista-categorias-dinamica"></datalist>
 
-                    <button class="btn-action" onclick="guardarDisenoComunitario()">✨ Publicar en Catálogo</button>
+                    <button class="btn-action" onclick="guardarDisenoComunitario()">✨ Guardar en Catálogo</button>
                     <button class="btn-whatsapp" onclick="pedirPorWhatsApp()">💬 Pedir por WhatsApp</button>
                 </div>
             </div>
@@ -193,27 +190,28 @@
 
         <!-- VISTA CATÁLOGO -->
         <section id="view-catalogo" class="section-view">
-            <h3 style="margin-bottom: 10px;">🛍️ Catálogo Comunitario</h3>
-            <input type="text" id="buscar-catalogo" placeholder="🔍 Buscar por nombre o tag..." oninput="renderCatalogo()" style="margin-bottom: 10px;">
-            <div id="tags-bar" style="margin-bottom: 10px; overflow-x: auto; white-space: nowrap;"></div>
+            <h3 style="margin-bottom: 8px;">🛍️ Catálogo</h3>
+            <input type="text" id="buscar-catalogo" placeholder="🔍 Buscar..." oninput="renderCatalogo()" style="margin-bottom: 8px;">
+            <div id="tags-bar" style="margin-bottom: 8px; overflow-x: auto; white-space: nowrap;"></div>
             <div class="scrollable-content">
                 <div class="grid-catalogo" id="contenedor-catalogo"></div>
             </div>
         </section>
 
-        <!-- VISTA PERFIL DE USUARIO (Reducción de Fricción) -->
+        <!-- VISTA PERFIL E ID ANÓNIMO -->
         <aside id="view-perfil" class="section-view">
-            <h3>👤 Mi Perfil / Datos de Envío</h3>
-            <p style="font-size:0.8rem; color:#666; margin: 8px 0 15px 0;">Guarda tu contacto una sola vez para no tener que escribirlo en cada diseño.</p>
-            <div style="display:flex; flex-direction:column; gap:10px;">
-                <input type="text" id="perfil-nombre" placeholder="Tu Nombre o Apodo">
-                <input type="text" id="perfil-contacto" placeholder="Tu WhatsApp o @Instagram">
-                <button class="btn-action" onclick="guardarPerfilLocal()">💾 Guardar Perfil</button>
+            <h3>👤 Perfil de Usuario</h3>
+            <div style="background:#e2e8f0; padding:10px; border-radius:8px; margin: 10px 0; font-size:0.85rem;">
+                <strong>Tu ID de Cliente:</strong> <span id="user-id-display" style="color:var(--primary);"></span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                <input type="text" id="perfil-nombre" placeholder="Nombre opcional">
+                <input type="text" id="perfil-contacto" placeholder="WhatsApp / Redes opcional">
+                <button class="btn-action" onclick="guardarPerfilLocal()">💾 Guardar Datos</button>
             </div>
         </aside>
     </div>
 
-    <!-- Navegación Móvil -->
     <nav class="mobile-nav">
         <button class="nav-tab active" onclick="switchTab('view-render', this)">🎨 Editor</button>
         <button class="nav-tab" onclick="switchTab('view-catalogo', this)">🛍️ Catálogo</button>
@@ -223,25 +221,28 @@
     <div id="toast"></div>
 
     <script>
-        // ESTADO Y CATEGORÍAS RANKEADAS POR USO
+        // IDENTIFICADOR ÚNICO DE USUARIO
+        let userId = localStorage.getItem('user_id') || 'USR-' + Math.floor(1000 + Math.random() * 9000);
+        localStorage.setItem('user_id', userId);
+
         let currentImgUrl = "";
         let tagSeleccionado = "Todos";
         let categoriasDinamicas = JSON.parse(localStorage.getItem('categorias_db')) || [
-            { nombre: 'Anime', uso: 15 },
-            { nombre: 'Geek', uso: 10 },
-            { nombre: 'Gaming', uso: 8 },
-            { nombre: 'Música', uso: 5 }
+            { nombre: 'Anime', uso: 10 },
+            { nombre: 'Geek', uso: 8 },
+            { nombre: 'Gaming', uso: 5 }
         ];
 
         let catalogoGlobal = JSON.parse(localStorage.getItem('catalogo_local')) || [];
 
         window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('user-id-display').innerText = userId;
             actualizarDatalistCategorias();
             cargarPerfilGuardado();
             renderCatalogo();
         });
 
-        // --- MOCKUP LOGIC ---
+        // --- MOCKUP FIX & CONTROLES ---
         function cambiarSoporte() {
             const soporte = document.getElementById('select-soporte').value;
             const wrapper = document.getElementById('contenedor-mockup');
@@ -300,24 +301,12 @@
             }
         }
 
-        // --- CATEGORÍAS INTELIGENTES Y PUBLICACIÓN ---
+        // --- CATEGORÍAS Y GUARDADO ---
         function actualizarDatalistCategorias() {
-            // Ordena categorías por uso descendente
             categoriasDinamicas.sort((a, b) => b.uso - a.uso);
             localStorage.setItem('categorias_db', JSON.stringify(categoriasDinamicas));
-
-            const datalist = document.getElementById('lista-categorias-dinamica');
-            datalist.innerHTML = categoriasDinamicas.map(c => `<option value="${c.nombre}">`).join('');
-        }
-
-        function registrarONutrirCategoria(nombreCat) {
-            const existe = categoriasDinamicas.find(c => c.nombre.toLowerCase() === nombreCat.toLowerCase());
-            if (existe) {
-                existe.uso += 1;
-            } else {
-                categoriasDinamicas.push({ nombre: nombreCat, uso: 1 });
-            }
-            actualizarDatalistCategorias();
+            document.getElementById('lista-categorias-dinamica').innerHTML = 
+                categoriasDinamicas.map(c => `<option value="${c.nombre}">`).join('');
         }
 
         function guardarDisenoComunitario() {
@@ -329,13 +318,16 @@
                 return;
             }
 
-            registrarONutrirCategoria(categoria);
+            const catExistente = categoriasDinamicas.find(c => c.nombre.toLowerCase() === categoria.toLowerCase());
+            if (catExistente) catExistente.uso += 1;
+            else categoriasDinamicas.push({ nombre: categoria, uso: 1 });
+            actualizarDatalistCategorias();
 
-            const nuevoItem = { id: Date.now(), nombre, tag: categoria, url: currentImgUrl };
+            const nuevoItem = { id: Date.now(), userId, nombre, tag: categoria, url: currentImgUrl };
             catalogoGlobal.unshift(nuevoItem);
             localStorage.setItem('catalogo_local', JSON.stringify(catalogoGlobal));
 
-            mostrarToast("✨ ¡Diseño añadido al catálogo!");
+            mostrarToast("✨ ¡Diseño guardado!");
             renderCatalogo();
         }
 
@@ -344,7 +336,6 @@
             const busqueda = document.getElementById('buscar-catalogo').value.toLowerCase();
             const tagsBar = document.getElementById('tags-bar');
 
-            // Renderizado de Filtros de Tag
             const tagsUnicos = ['Todos', ...new Set(categoriasDinamicas.map(c => c.nombre))];
             tagsBar.innerHTML = tagsUnicos.map(t => `
                 <span class="tag-badge ${tagSeleccionado === t ? 'active' : ''}" onclick="filtrarPorTag('${t}')">${t}</span>
@@ -357,7 +348,7 @@
             });
 
             if (filtrados.length === 0) {
-                contenedor.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:20px; color:#aaa;">No hay diseños aquí aún.</div>`;
+                contenedor.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:20px; color:#aaa;">Catálogo vacío.</div>`;
                 return;
             }
 
@@ -366,7 +357,7 @@
                     <div class="card-img" style="background-image: url('${item.url}')"></div>
                     <div class="card-info">
                         <strong>${item.nombre}</strong><br>
-                        <span style="color:var(--primary); font-size:0.75rem;">🏷️ ${item.tag}</span>
+                        <span style="color:var(--primary);">🏷️ ${item.tag}</span>
                     </div>
                 </div>
             `).join('');
@@ -383,25 +374,25 @@
             switchTab('view-render', document.querySelectorAll('.nav-tab')[0]);
         }
 
-        // --- PEDIDOS WHATSAPP & PERFIL ---
         function pedirPorWhatsApp() {
             const nombre = document.getElementById('nombre-diseno').value || "Sticker Personalizado";
-            const categoria = document.getElementById('categoria-input').value || "Geek";
             const contacto = localStorage.getItem('user_contact') || "Cliente";
 
-            const mensaje = encodeURIComponent(`Hola! Me interesa encargar este diseño:\n📌 Nombre: ${nombre}\n🏷️ Categoría: ${categoria}\n👤 Cliente: ${contacto}\n🖼️ Link: ${currentImgUrl}`);
+            const mensaje = encodeURIComponent(`Hola! Quiero encargar este diseño:\n📌 ID: ${userId}\n📌 Nombre: ${nombre}\n👤 Contacto: ${contacto}\n🖼️ Imagen: ${currentImgUrl}`);
             window.open(`https://wa.me/?text=${mensaje}`, '_blank');
         }
 
         function guardarPerfilLocal() {
+            const nombre = document.getElementById('perfil-nombre').value;
             const contacto = document.getElementById('perfil-contacto').value;
+            localStorage.setItem('user_name', nombre);
             localStorage.setItem('user_contact', contacto);
-            mostrarToast("👤 Perfil guardado correctamente.");
+            mostrarToast("👤 Perfil guardado.");
         }
 
         function cargarPerfilGuardado() {
-            const contacto = localStorage.getItem('user_contact');
-            if (contacto) document.getElementById('perfil-contacto').value = contacto;
+            if (localStorage.getItem('user_name')) document.getElementById('perfil-nombre').value = localStorage.getItem('user_name');
+            if (localStorage.getItem('user_contact')) document.getElementById('perfil-contacto').value = localStorage.getItem('user_contact');
         }
 
         function switchTab(viewId, btn) {
@@ -415,7 +406,7 @@
             const toast = document.getElementById('toast');
             toast.innerText = msg;
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2200);
+            setTimeout(() => toast.classList.remove('show'), 2000);
         }
     </script>
 </body>
